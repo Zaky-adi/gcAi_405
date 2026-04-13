@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\ParkingLot;
+use App\Models\VehicleLog;
 use Illuminate\Database\Eloquent\Model;
 
 class Device extends Model
@@ -11,4 +13,15 @@ class Device extends Model
         'ip_address' => 'encrypted',
         'rtsp_url' => 'encrypted',
     ];
+
+    public function vehicleLogs()
+    {
+        return $this->hasMany(VehicleLog::class);
+    }
+
+    // (Opsional) Relasi ke tabel parkir jika Device mengelola area parkir tertentu
+    public function parkingLot()
+    {
+        return $this->hasOne(ParkingLot::class);
+    }
 }
