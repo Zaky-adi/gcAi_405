@@ -51,5 +51,8 @@ $app->singleton(
 | from the actual running of the application and sending responses.
 |
 */
+if (isset($_ENV['VERCEL_ENV'])) {
+    $app->useStoragePath('/tmp');
+}
 
 return $app;
