@@ -6,16 +6,16 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Jenssegers\Agent\Agent;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        // 1. Keamanan: Validasi input yang masuk
+        // 1. Validasi: 'device_name' dihapus karena sekarang terdeteksi otomatis
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
-            'device_name' => 'required|string' // Penting untuk mengidentifikasi perangkat
         ]);
 
         if ($validator->fails()) {
@@ -38,14 +38,23 @@ class AuthController extends Controller
         }
 
         // 4. FITUR SINGLE DEVICE LOGIN: 
-        // Hapus semua token/sesi yang sudah ada untuk user ini sebelumnya.
-        // Ini akan membuat device pertama (yang sebelumnya login) ter-logout secara otomatis
-        // karena tokennya sudah tidak valid / terhapus dari database.
         $user->tokens()->delete();
 
-        // 5. Buat token baru & catat sesi di tabel personal_access_tokens
-        // Kita bisa menggabungkan nama device dengan IP atau User Agent untuk pencatatan yang lebih detail
-        $tokenInfo = $request->device_name . ' (' . $request->ip() . ')';
+        // 5. AUTO DETEKSI DEVICE & IP (Versi Rapi)
+        $agent = new Agent();
+        
+        // Mengambil nama OS (Windows, OS X, Android, dll) dan Browser (Chrome, Safari, dll)
+        $platform = $agent->platform() ?: 'Unknown OS';
+        $browser = $agent->browser() ?: 'Unknown Browser';
+        
+        // Menggabungkan nama OS dan Browser
+        $cleanDeviceName = $platform . ' - ' . $browser; 
+        $ipAddress = $request->ip();
+
+        // Nama token yang akan disimpan di database (Contoh: "Windows - Chrome (IP: 192.168.1.1)")
+        $tokenInfo = $cleanDeviceName . ' (IP: ' . $ipAddress . ')';
+        
+        // Buat token baru
         $token = $user->createToken($tokenInfo)->plainTextToken;
 
         // Return response berhasil
@@ -67,7 +76,6 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        // Menghapus token yang sedang digunakan saat ini
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
