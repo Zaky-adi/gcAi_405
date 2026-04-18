@@ -37,23 +37,23 @@ class AuthController extends Controller
             ], 401);
         }
 
-        // 4. FITUR SINGLE DEVICE LOGIN: 
+        // 4. FITUR SINGLE DEVICE LOGIN:
         $user->tokens()->delete();
 
         // 5. AUTO DETEKSI DEVICE & IP (Versi Rapi)
         $agent = new Agent();
-        
+
         // Mengambil nama OS (Windows, OS X, Android, dll) dan Browser (Chrome, Safari, dll)
         $platform = $agent->platform() ?: 'Unknown OS';
         $browser = $agent->browser() ?: 'Unknown Browser';
-        
+
         // Menggabungkan nama OS dan Browser
-        $cleanDeviceName = $platform . ' - ' . $browser; 
+        $cleanDeviceName = $platform . ' - ' . $browser;
         $ipAddress = $request->ip();
 
         // Nama token yang akan disimpan di database (Contoh: "Windows - Chrome (IP: 192.168.1.1)")
         $tokenInfo = $cleanDeviceName . ' (IP: ' . $ipAddress . ')';
-        
+
         // Buat token baru
         $token = $user->createToken($tokenInfo)->plainTextToken;
 
@@ -82,5 +82,35 @@ class AuthController extends Controller
             'success' => true,
             'message' => 'Logout berhasil.'
         ], 200);
+    }
+
+    public function register(Request $request)
+    {
+        // Validasi
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validasi gagal',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // Simpan user
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'operator',
+        ]);
+
+        return response()->json([
+            'message' => 'Registrasi berhasil',
+            'data' => $user
+        ], 201);
     }
 }

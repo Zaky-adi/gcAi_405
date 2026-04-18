@@ -7,8 +7,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('throttle:5,1')->post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->post('/vehicle-detect', [VehicleDetectionController::class, 'store']);
+Route::post('/register', [AuthController::class, 'register']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    
+
     Route::post('/logout', [AuthController::class, 'logout']);
 });
