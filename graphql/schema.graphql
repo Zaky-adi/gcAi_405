@@ -1,0 +1,77 @@
+# ==========================================
+# 1. DEFINISI TIPE DATA (MODELS)
+# ==========================================
+
+type AuthResponse {
+    token: String!
+    uid: String!
+    message: String!
+}
+
+type Device {
+    id: ID!
+    device_name: String!
+    location: String!
+    is_active: Boolean!
+}
+
+type VehicleLog {
+    id: ID!
+    device_id: String!
+    vehicle_type: String!
+    confidence_score: Float!
+    detected_at: String
+}
+
+type ParkingLot {
+    id: ID!
+    device_id: String!
+    area_name: String!
+    total_capacity: Int!
+    current_occupied: Int!
+}
+
+# ==========================================
+# 2. ENDPOINT UNTUK MEMBACA DATA (QUERIES)
+# ==========================================
+
+type Query {
+    # Mengambil daftar semua kamera/device (Terlindungi)
+    devices: [Device!]! 
+        @middleware(checks: ["firebase.auth"]) 
+        @field(resolver: "App\\GraphQL\\Queries\\DeviceQuery@resolve")
+    
+    # Mengambil riwayat log kendaraan berdasarkan ID kamera (Terlindungi)
+    logsByDevice(device_id: String!): [VehicleLog!]! 
+        @middleware(checks: ["firebase.auth"]) 
+        @field(resolver: "App\\GraphQL\\Queries\\LogQuery@resolve")
+
+    # Mengambil status kapasitas area parkir saat ini (Terlindungi)
+    parkingLots: [ParkingLot!]! 
+        @middleware(checks: ["firebase.auth"]) 
+        @field(resolver: "App\\GraphQL\\Queries\\ParkingQuery@resolve")
+}
+
+# ==========================================
+# 3. ENDPOINT UNTUK MENULIS DATA (MUTATIONS)
+# ==========================================
+
+type Mutation {
+    # --- Autentikasi (Publik) ---
+    login(email: String!, password: String!): AuthResponse! 
+        @field(resolver: "App\\GraphQL\\Mutations\\AuthMutation@login")
+    
+    logout(uid: String!): String! 
+        @field(resolver: "App\\GraphQL\\Mutations\\AuthMutation@logout")
+    
+    # --- Operasional Sistem (Terlindungi) ---
+    
+    # Endpoint untuk kamera AI mengirim data kendaraan masuk
+    createVehicleLog(
+        device_id: String!
+        vehicle_type: String!
+        confidence_score: Float!
+    ): VehicleLog! 
+        @middleware(checks: ["firebase.auth"]) 
+        @field(resolver: "App\\GraphQL\\Mutations\\CreateLogMutation@resolve")
+}
