@@ -43,19 +43,17 @@ type ParkingLot {
 # ==========================================
 
 type Query {
-    # Mengambil daftar semua kamera/device (Terlindungi)
-    devices: [Device!]! 
-        @middleware(checks: ["firebase.auth"]) 
+
+    # Mengambil daftar semua kamera/device
+    devices: [Device!]!
         @field(resolver: "App\\GraphQL\\Queries\\DeviceQuery@resolve")
-    
-    # Mengambil riwayat log kendaraan berdasarkan ID kamera (Terlindungi)
-    logsByDevice(device_id: String!): [VehicleLog!]! 
-        @middleware(checks: ["firebase.auth"]) 
+
+    # Mengambil riwayat log kendaraan berdasarkan ID kamera
+    logsByDevice(device_id: String!): [VehicleLog!]!
         @field(resolver: "App\\GraphQL\\Queries\\LogQuery@resolve")
 
-    # Mengambil status kapasitas area parkir saat ini (Terlindungi)
-    parkingLots: [ParkingLot!]! 
-        @middleware(checks: ["firebase.auth"]) 
+    # Mengambil status kapasitas area parkir saat ini
+    parkingLots: [ParkingLot!]!
         @field(resolver: "App\\GraphQL\\Queries\\ParkingQuery@resolve")
 }
 
@@ -64,31 +62,36 @@ type Query {
 # ==========================================
 
 type Mutation {
+
     # --- Autentikasi (Publik) ---
-    login(email: String!, password: String!): AuthResponse! 
+
+    login(
+        email: String!
+        password: String!
+    ): AuthResponse!
         @field(resolver: "App\\GraphQL\\Mutations\\AuthMutation@login")
-    
-    logout(uid: String!): String! 
+
+    logout(
+        uid: String!
+    ): String!
         @field(resolver: "App\\GraphQL\\Mutations\\AuthMutation@logout")
-    
-    # --- Operasional Sistem (Terlindungi) ---
-    
+
+    # --- Operasional Sistem ---
+
     # Endpoint untuk kamera AI mengirim data kendaraan masuk
     createVehicleLog(
         device_id: String!
         vehicle_type: String!
         confidence_score: Float!
-    ): VehicleLog! 
-        @middleware(checks: ["firebase.auth"]) 
+    ): VehicleLog!
         @field(resolver: "App\\GraphQL\\Mutations\\CreateLogMutation@resolve")
 
-    # Endpoint untuk menambahkan user baru (Terlindungi oleh token)
+    # Endpoint untuk menambahkan user baru
     createUser(
         name: String!
         email: String!
         password: String!
-        role: String! # Isi dengan "admin" atau "operator"
-    ): User! 
-        @middleware(checks: ["firebase.auth"]) 
+        role: String!
+    ): User!
         @field(resolver: "App\\GraphQL\\Mutations\\UserMutation@createUser")
 }
