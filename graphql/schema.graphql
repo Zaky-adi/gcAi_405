@@ -8,6 +8,13 @@ type AuthResponse {
     message: String!
 }
 
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    role: String!
+}
+
 type Device {
     id: ID!
     device_name: String!
@@ -74,4 +81,14 @@ type Mutation {
     ): VehicleLog! 
         @middleware(checks: ["firebase.auth"]) 
         @field(resolver: "App\\GraphQL\\Mutations\\CreateLogMutation@resolve")
+
+    # Endpoint untuk menambahkan user baru (Terlindungi oleh token)
+    createUser(
+        name: String!
+        email: String!
+        password: String!
+        role: String! # Isi dengan "admin" atau "operator"
+    ): User! 
+        @middleware(checks: ["firebase.auth"]) 
+        @field(resolver: "App\\GraphQL\\Mutations\\UserMutation@createUser")
 }
