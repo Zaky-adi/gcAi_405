@@ -2,11 +2,6 @@
 # 1. DEFINISI TIPE DATA (MODELS)
 # ==========================================
 
-type Query {
-    # Endpoint untuk mendapatkan total kendaraan yang masuk hari ini
-    totalKendaraanMasukHariIni: Int!
-}
-
 type AuthResponse {
     token: String!
     uid: String!
@@ -60,6 +55,9 @@ type Query {
     # Mengambil status kapasitas area parkir saat ini
     parkingLots: [ParkingLot!]!
         @field(resolver: "App\\GraphQL\\Queries\\ParkingQuery@resolve")
+    
+     Endpoint untuk mendapatkan total kendaraan yang masuk hari ini
+    totalKendaraanMasukHariIni: Int!
 }
 
 # ==========================================
