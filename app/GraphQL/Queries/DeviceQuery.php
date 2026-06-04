@@ -5,7 +5,7 @@ namespace App\GraphQL\Queries;
 final readonly class DeviceQuery
 {
     /** @param  array{}  $args */
-    public function __invoke(null $_, array $args)
+    public function resolve(null $_, array $args)
     {
         // TODO implement the resolver
     }
