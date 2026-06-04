@@ -2,6 +2,11 @@
 # 1. DEFINISI TIPE DATA (MODELS)
 # ==========================================
 
+type Query {
+    # Endpoint untuk mendapatkan total kendaraan yang masuk hari ini
+    totalKendaraanMasukHariIni: Int!
+}
+
 type AuthResponse {
     token: String!
     uid: String!
