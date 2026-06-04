@@ -64,7 +64,14 @@ type Query {
     # Endpoint untuk mendapatkan total kendaraan yang masuk hari ini
     totalKendaraanMasukHariIni: Int!
 
+    # Endpoint untuk mendapatkan total kendaraan yang masuk minggu ini
     totalKendaraanMasukMingguIni: StatistikMingguan!
+
+    # Endpoint total mobil hari ini
+    totalMobilHariIni: Int!
+
+    # Endpoint total truck/pickup hari ini
+    totalTrukHariIni: Int!
 }
 
 # ==========================================
