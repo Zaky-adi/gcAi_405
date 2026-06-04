@@ -56,7 +56,7 @@ type Query {
     parkingLots: [ParkingLot!]!
         @field(resolver: "App\\GraphQL\\Queries\\ParkingQuery@resolve")
     
-     Endpoint untuk mendapatkan total kendaraan yang masuk hari ini
+    # Endpoint untuk mendapatkan total kendaraan yang masuk hari ini
     totalKendaraanMasukHariIni: Int!
 }
 
