@@ -60,6 +60,9 @@ type Query {
     # Mengambil status kapasitas area parkir saat ini
     parkingLots: [ParkingLot!]!
         @field(resolver: "App\\GraphQL\\Queries\\ParkingQuery@resolve")
+
+    # Endpoint untuk mengambil 5 aktivitas deteksi terakhir
+    aktivitasTerbaru: [VehicleLog!]!
     
     # Endpoint untuk mendapatkan total kendaraan yang masuk hari ini
     totalKendaraanMasukHariIni: Int!
