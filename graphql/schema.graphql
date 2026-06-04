@@ -2,6 +2,11 @@
 # 1. DEFINISI TIPE DATA (MODELS)
 # ==========================================
 
+type StatistikMingguan {
+    total: Int!
+    persentase: Float!
+}
+
 type AuthResponse {
     token: String!
     uid: String!
@@ -58,6 +63,8 @@ type Query {
     
     # Endpoint untuk mendapatkan total kendaraan yang masuk hari ini
     totalKendaraanMasukHariIni: Int!
+
+    totalKendaraanMasukMingguIni: StatistikMingguan!
 }
 
 # ==========================================
