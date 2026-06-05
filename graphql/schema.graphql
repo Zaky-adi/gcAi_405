@@ -2,6 +2,14 @@
 # 1. DEFINISI TIPE DATA (MODELS)
 # ==========================================
 
+type SystemStatus {
+    id: ID!
+    nama: String!
+    deskripsi: String!
+    status_text: String!
+    is_active: Boolean! # Ini berguna untuk frontend menentukan warna (Hijau/Merah)
+}
+
 type PuncakTertinggi {
     jam: String!
     jumlah: Int!
@@ -98,6 +106,9 @@ type Query {
         endDate: String!
         vehicleType: String # Boleh kosong/null jika user memilih "Semua"
     ): ReportLaporan!
+
+    # Endpoint untuk halaman Health Check / Status Sistem
+    statusSistem: [SystemStatus!]!
 }
 
 # ==========================================
