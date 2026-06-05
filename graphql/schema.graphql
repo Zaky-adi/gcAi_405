@@ -2,6 +2,22 @@
 # 1. DEFINISI TIPE DATA (MODELS)
 # ==========================================
 
+type PuncakTertinggi {
+    jam: String!
+    jumlah: Int!
+}
+
+type RingkasanLaporan {
+    total: Int!
+    rataRataPerHari: Float!
+    puncakTertinggi: PuncakTertinggi
+}
+
+type ReportLaporan {
+    ringkasan: RingkasanLaporan!
+    data: [VehicleLog!]!
+}
+
 type StatistikMingguan {
     total: Int!
     persentase: Float!
@@ -75,6 +91,13 @@ type Query {
 
     # Endpoint total truck/pickup hari ini
     totalTrukHariIni: Int!
+
+    # Endpoint untuk halaman laporan utama
+    laporanKendaraan(
+        startDate: String!
+        endDate: String!
+        vehicleType: String # Boleh kosong/null jika user memilih "Semua"
+    ): ReportLaporan!
 }
 
 # ==========================================
