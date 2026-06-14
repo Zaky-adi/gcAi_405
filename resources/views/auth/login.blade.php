@@ -71,7 +71,7 @@
           </h1>
           <p class="text-muted text-xs mt-1 leading-relaxed">
             Sistem Monitoring &amp; Pengendalian Gerbang<br />
-            Portal Gerbang Politeknik Negeri Bukittinggi
+            Portal Gerbang Politeknik Negeri Batam
           </p>
         </div>
       </div>
@@ -160,7 +160,7 @@
 
       <!-- Footer credit -->
       <p class="text-center text-[11px] text-muted mt-4">
-        HKI, TIKo IoT, Politeknik Negeri Bukittinggi
+        HKI, TIKo IoT, Politeknik Negeri Batam
       </p>
 
     </div>
@@ -182,4 +182,4 @@
 </body>
 </html>
 
-Gate Control AI - v0 by Vercel
+Gate Control AI
