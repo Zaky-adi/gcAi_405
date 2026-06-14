@@ -10,5 +10,10 @@
         "lodash": "^4.17.19",
         "postcss": "^8.1.14",
         "vite": "^4.0.0"
+    },
+    "dependencies": {
+        "autoprefixer": "^10.5.0",
+        "postcss-cli": "^11.0.1",
+        "tailwindcss": "^4.3.1"
     }
 }
