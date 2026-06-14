@@ -44,11 +44,6 @@
 </head>
 <body class="min-h-screen bg-surface font-sans flex flex-col">
 
-  <!-- Minimal top bar (browser tab label area) -->
-  <div class="bg-[#2c2c2c] border-b border-border px-4 py-2 flex items-center gap-2">
-    <span class="text-sm text-muted">login</span>
-  </div>
-
   <!-- Main centered content -->
   <main class="flex-1 flex items-center justify-center px-4 py-12">
     <div class="login-card bg-card rounded-2xl w-full max-w-sm p-8">
