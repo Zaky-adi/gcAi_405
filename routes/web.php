@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 
 // 1. Route untuk menampilkan halaman form login (Diberi nama 'login')
 Route::get('/login', function () {
-    return view('auth.login');
+    return view('auth.login.blade.php');
 })->name('login');
 
 // 2. Route halaman utama (/) yang langsung me-redirect ke halaman login
