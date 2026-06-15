@@ -77,7 +77,7 @@
           Masuk ke Dashboard
         </h2>
 
-        <form action="#" method="POST" novalidate>
+        <form action="{{ url('/login') }}" method="GET" novalidate>
 
           <!-- Username -->
           <div class="mb-4">
@@ -144,7 +144,8 @@
 
           <!-- Submit button -->
           <button
-            type="submit"
+            type="button"
+            onclick="window.location.href='{{ url('/dashboard') }}'"
             class="w-full bg-white hover:bg-gray-100 active:bg-gray-200 text-gray-900 text-sm font-semibold rounded-lg py-2.5 transition-colors duration-150 shadow"
           >
             Masuk
