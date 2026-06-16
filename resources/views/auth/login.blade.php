@@ -27,6 +27,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <style>
     /* Remove default browser focus ring; use custom */
     input:focus { outline: none; }
@@ -39,6 +42,12 @@
       box-shadow:
         0 0 0 1px rgba(255,255,255,0.06),
         0 8px 40px rgba(0,0,0,0.6);
+    }
+    
+    /* Kustomisasi background SweetAlert agar cocok dengan dark mode */
+    div:where(.swal2-container) div:where(.swal2-popup) {
+      background: #2a2a2a;
+      color: #ffffff;
     }
   </style>
 </head>
@@ -160,17 +169,24 @@
       eyeClose.classList.toggle('hidden', !isHidden);
     }
 
-    // Integrasi GraphQL Login
+    // Integrasi GraphQL Login dengan SweetAlert
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
       e.preventDefault(); // Mencegah reload halaman
 
-      const emailInput = document.getElementById('username').value; // Mengambil value dari input username
+      const emailInput = document.getElementById('username').value; 
       const passwordInput = document.getElementById('password').value;
       const submitBtn = document.getElementById('submitBtn');
 
-      // Validasi kosong
+      // Validasi kosong menggunakan SweetAlert
       if(!emailInput || !passwordInput) {
-        alert("Email dan password tidak boleh kosong!");
+        Swal.fire({
+          icon: 'warning',
+          title: 'Perhatian',
+          text: 'Email dan password tidak boleh kosong!',
+          confirmButtonColor: '#f97316',
+          background: '#2a2a2a',
+          color: '#ffffff'
+        });
         return;
       }
 
@@ -198,12 +214,11 @@
       };
 
       try {
-        const response = await fetch('/graphql', { // Sesuaikan dengan endpoint GraphQL Laravel kamu
+        const response = await fetch('/graphql', { 
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            // Jika ada CSRF token Laravel, tambahkan di sini
             // 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
           },
           body: JSON.stringify(graphqlQuery)
@@ -211,25 +226,40 @@
 
         const result = await response.json();
 
-        // Cek jika GraphQL mengembalikan array errors (seperti password salah dari AuthMutation)
+        // Cek jika GraphQL mengembalikan array errors
         if (result.errors) {
           throw new Error(result.errors[0].message);
         }
 
-        // Jika berhasil, ambil data dari respons
         const authData = result.data.login;
         
-        // Simpan token JWT dan UID ke Local Storage
+        // Simpan token ke Local Storage
         localStorage.setItem('firebase_token', authData.token);
         localStorage.setItem('firebase_uid', authData.uid);
 
-        // Berikan notifikasi sukses dan arahkan ke dashboard
-        alert(authData.message); 
-        window.location.href = "{{ url('/dashboard') }}"; // Redirect Laravel URL
+        // Notifikasi Sukses dan Redirect
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil!',
+          text: authData.message,
+          showConfirmButton: false,
+          timer: 1500,
+          background: '#2a2a2a',
+          color: '#ffffff'
+        }).then(() => {
+          window.location.href = "{{ url('/dashboard') }}";
+        });
 
       } catch (error) {
-        // Tampilkan pesan error (misal: "Login gagal: Periksa kembali email dan password Anda.")
-        alert(error.message);
+        // Notifikasi Error
+        Swal.fire({
+          icon: 'error',
+          title: 'Login Gagal',
+          text: error.message,
+          confirmButtonColor: '#f97316',
+          background: '#2a2a2a',
+          color: '#ffffff'
+        });
       } finally {
         // Kembalikan state tombol
         submitBtn.innerText = originalText;
