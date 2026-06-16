@@ -68,10 +68,7 @@
 </head>
 <body class="bg-surface font-sans text-white flex flex-col h-screen overflow-hidden">
 
-  <!-- ═══════════════════════ TOP HEADER ═══════════════════════ -->
   <header class="flex items-center justify-between bg-sidebar border-b border-divider px-4 py-2.5 flex-shrink-0 z-10">
-
-    <!-- Logo -->
     <div class="flex items-center gap-2.5">
       <div class="w-9 h-9 bg-orange rounded-lg flex items-center justify-center flex-shrink-0">
         <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -81,40 +78,32 @@
       </div>
       <div class="leading-tight">
         <p class="text-white text-sm font-bold leading-none">Gate Control <span class="text-orange">AI</span></p>
-        <p class="text-muted text-[9px] mt-0.5 leading-tight max-w-[160px]">Sistem Monitoring &amp; Pengendalian Gerbang Portal Politeknik Negeri Bukittinggi</p>
+        <p class="text-muted text-[9px] mt-0.5 leading-tight max-w-[160px]">Sistem Monitoring &amp; Pengendalian Gerbang Portal Politeknik Negeri Batam</p>
       </div>
     </div>
 
-    <!-- Center title -->
     <div class="hidden md:block text-center">
       <p class="text-white text-base font-semibold leading-none">Laporan Kendaraan</p>
       <p class="text-muted text-xs mt-0.5">Rekap data kendaraan masuk</p>
     </div>
 
-    <!-- Right: standby + clock -->
     <div class="flex items-center gap-3">
       <button class="flex items-center gap-1.5 bg-[#2a1a1a] border border-red-800 text-red-400 rounded-md px-3 py-1 text-xs font-medium">
         <span class="pulse-dot"></span>
         Standby
       </button>
       <div class="text-right leading-tight">
-        <p id="clock" class="text-white text-lg font-bold tracking-widest leading-none">22:15:54</p>
-        <p id="dateline" class="text-muted text-[10px] mt-0.5">Rabu, 15 April 2026</p>
+        <p id="clock" class="text-white text-lg font-bold tracking-widest leading-none">00:00:00</p>
+        <p id="dateline" class="text-muted text-[10px] mt-0.5">Memuat Tanggal...</p>
       </div>
     </div>
-
   </header>
 
-  <!-- ═══════════════════════ BODY ═══════════════════════ -->
   <div class="flex flex-1 overflow-hidden">
 
-    <!-- ─────────── SIDEBAR ─────────── -->
     <aside class="w-44 bg-sidebar border-r border-divider flex flex-col flex-shrink-0 overflow-y-auto py-3">
-
       <p class="text-muted text-[9px] font-semibold uppercase tracking-widest px-4 mb-2">Menu Utama</p>
-
       <nav class="flex flex-col gap-0.5 px-2">
-        <!-- Dashboard -->
         <a href="{{ url('/dashboard') }}" class="nav-link flex items-center gap-2.5 rounded-md px-3 py-2 text-xs font-medium text-muted">
           <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
@@ -122,14 +111,12 @@
           </svg>
           Dashboard
         </a>
-        <!-- Live View -->
         <a href="{{ url('/liveview') }}" class="nav-link flex items-center gap-2.5 rounded-md px-3 py-2 text-xs font-medium text-muted">
           <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
           </svg>
           Live view
         </a>
-        <!-- Laporan Kendaraan — ACTIVE -->
         <a href="{{ url('/reports') }}" class="nav-link active flex items-center gap-2.5 rounded-md px-3 py-2 text-xs font-medium text-white">
           <svg class="w-4 h-4 text-orange flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -140,7 +127,6 @@
       </nav>
 
       <p class="text-muted text-[9px] font-semibold uppercase tracking-widest px-4 mt-5 mb-2">Pengaturan</p>
-
       <nav class="flex flex-col gap-0.5 px-2">
         <a href="{{ url('/jadwal') }}" class="nav-link flex items-center gap-2.5 rounded-md px-3 py-2 text-xs font-medium text-muted">
           <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -159,126 +145,121 @@
           Perangkat IoT
         </a>
       </nav>
-
+      
+      <div class="mt-auto px-2 pb-4">
+        <button onclick="logout()" class="w-full flex items-center gap-2.5 rounded-md px-3 py-2 text-xs font-medium text-red-400 hover:bg-red-500/10 transition-colors">
+          <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          Keluar
+        </button>
+      </div>
     </aside>
 
-    <!-- ─────────── MAIN CONTENT ─────────── -->
     <main class="flex-1 overflow-y-auto p-4 flex flex-col gap-4 bg-surface">
 
-      <!-- FILTER ROW -->
       <div class="flex flex-wrap items-end gap-3 flex-shrink-0">
-
-        <!-- Dari Tanggal -->
         <div class="flex flex-col gap-1">
           <label class="text-muted text-[10px] font-semibold uppercase tracking-wider">Dari Tanggal</label>
           <div class="relative">
-            <input type="date" value="2026-04-15"
+            <input type="date" id="startDate"
               class="bg-inputbg border border-divider text-white text-xs rounded-md px-3 py-2 pr-9 appearance-none focus:outline-none focus:border-orange transition-colors w-36"
               style="color-scheme: dark;" />
           </div>
         </div>
 
-        <!-- Sampai Tanggal -->
         <div class="flex flex-col gap-1">
           <label class="text-muted text-[10px] font-semibold uppercase tracking-wider">Sampai Tanggal</label>
           <div class="relative">
-            <input type="date" value="2026-04-15"
+            <input type="date" id="endDate"
               class="bg-inputbg border border-divider text-white text-xs rounded-md px-3 py-2 pr-9 appearance-none focus:outline-none focus:border-orange transition-colors w-36"
               style="color-scheme: dark;" />
           </div>
         </div>
 
-        <!-- Jenis Kendaraan -->
         <div class="flex flex-col gap-1">
           <label class="text-muted text-[10px] font-semibold uppercase tracking-wider">Jenis Kendaraan</label>
-          <select class="bg-inputbg border border-divider text-white text-xs rounded-md px-3 py-2 focus:outline-none focus:border-orange transition-colors w-32 appearance-none cursor-pointer"
+          <select id="vehicleType" class="bg-inputbg border border-divider text-white text-xs rounded-md px-3 py-2 focus:outline-none focus:border-orange transition-colors w-32 appearance-none cursor-pointer"
                   style="color-scheme: dark;">
-            <option value="all">Semua</option>
-            <option value="mobil" selected>Mobil</option>
+            <option value="semua" selected>Semua</option>
+            <option value="mobil">Mobil</option>
             <option value="truck">Truck/Pickup</option>
           </select>
         </div>
 
-        <!-- Filter button -->
-        <button class="flex items-center gap-2 bg-inputbg border border-divider text-white text-xs font-medium rounded-md px-4 py-2 hover:border-orange hover:text-orange transition-colors">
+        <button id="btnFilter" class="flex items-center gap-2 bg-inputbg border border-divider text-white text-xs font-medium rounded-md px-4 py-2 hover:border-orange hover:text-orange transition-colors">
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
           </svg>
           Filter
         </button>
 
-        <!-- Export CSV button -->
-        <button class="flex items-center gap-2 bg-inputbg border border-divider text-white text-xs font-medium rounded-md px-4 py-2 hover:border-green hover:text-green transition-colors">
+        <button onclick="exportToCSV()" class="flex items-center gap-2 bg-inputbg border border-divider text-white text-xs font-medium rounded-md px-4 py-2 hover:border-green hover:text-green transition-colors">
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
             <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
           </svg>
           Export CSV
         </button>
-
       </div>
 
-      <!-- STAT CARDS -->
       <div class="grid grid-cols-3 gap-3 flex-shrink-0">
-
-        <!-- Total Filter -->
         <div class="bg-card border border-divider rounded-xl p-4 flex flex-col gap-1">
           <p class="text-muted text-[10px] font-semibold uppercase tracking-wider">Total Filter</p>
-          <p class="text-white text-3xl font-bold leading-none mt-1">44</p>
+          <p id="summaryTotal" class="text-white text-3xl font-bold leading-none mt-1">...</p>
           <p class="text-muted text-[11px]">Kendaraan ditemukan</p>
         </div>
 
-        <!-- Rata-rata/Hari -->
         <div class="bg-card border border-divider rounded-xl p-4 flex flex-col gap-1">
           <p class="text-muted text-[10px] font-semibold uppercase tracking-wider">Rata-rata/Hari</p>
-          <p class="text-white text-3xl font-bold leading-none mt-1">44</p>
+          <p id="summaryAvg" class="text-white text-3xl font-bold leading-none mt-1">...</p>
           <p class="text-muted text-[11px]">Kendaraan per hari</p>
         </div>
 
-        <!-- Puncak Tertinggi -->
         <div class="bg-card border border-divider rounded-xl p-4 flex flex-col gap-1">
           <p class="text-muted text-[10px] font-semibold uppercase tracking-wider">Puncak Tertinggi</p>
-          <p class="text-white text-3xl font-bold leading-none mt-1">10:00 <span class="text-xl text-muted font-semibold">(9)</span></p>
+          <p id="summaryPeak" class="text-white text-3xl font-bold leading-none mt-1">--:-- <span class="text-xl text-muted font-semibold">(0)</span></p>
           <p class="text-muted text-[11px]">Jam tersibuk</p>
         </div>
-
       </div>
 
-      <!-- DATA TABLE -->
       <div class="bg-card border border-divider rounded-xl flex-1 flex flex-col overflow-hidden min-h-0">
-
-        <!-- Table header -->
         <div class="flex-shrink-0 border-b border-divider">
           <table class="w-full text-[11px]">
             <thead>
               <tr class="text-muted uppercase tracking-wider">
                 <th class="text-center px-4 py-3 font-semibold w-14">No</th>
-                <th class="text-center px-4 py-3 font-semibold">Waktu Masuk</th>
-                <th class="text-center px-4 py-3 font-semibold">Jenis Kendaraan</th>
-                <th class="text-center px-4 py-3 font-semibold">Confidence</th>
-                <th class="text-center px-4 py-3 font-semibold">Sumber</th>
+                <th class="text-center px-4 py-3 font-semibold w-1/4">Waktu Masuk</th>
+                <th class="text-center px-4 py-3 font-semibold w-1/4">Jenis Kendaraan</th>
+                <th class="text-center px-4 py-3 font-semibold w-1/4">Confidence</th>
+                <th class="text-center px-4 py-3 font-semibold w-1/4">Sumber</th>
               </tr>
             </thead>
           </table>
         </div>
 
-        <!-- Table body scroll -->
         <div class="flex-1 overflow-y-auto table-scroll">
           <table class="w-full text-[11px]">
             <tbody id="tableBody">
-              <!-- rows injected by JS -->
+              <tr><td colspan="5" class="text-center py-4 text-muted">Memuat data laporan...</td></tr>
             </tbody>
           </table>
         </div>
-
       </div>
-      <!-- end table card -->
-
-    </main>
+      </main>
   </div>
 
-  <!-- ═══════════════════════ SCRIPTS ═══════════════════════ -->
   <script>
+    /* ── Autentikasi Check ── */
+    const token = localStorage.getItem('firebase_token');
+    if (!token) window.location.href = "{{ url('/login') }}";
+
+    function logout() {
+        localStorage.removeItem('firebase_token');
+        localStorage.removeItem('firebase_uid');
+        window.location.href = "{{ url('/login') }}";
+    }
+
     // ── Live clock ──
     function updateClock() {
       const now   = new Date();
@@ -294,43 +275,168 @@
     updateClock();
     setInterval(updateClock, 1000);
 
-    // ── Table data ──
-    const rows = [
-      { no:1,  waktu:'15/4/2026, 17:55:44', jenis:'Truck/Pickup', confidence:'63.0%', sumber:'IoT Device' },
-      { no:2,  waktu:'15/4/2026, 17:55:00', jenis:'Mobil',        confidence:'63.0%', sumber:'IoT Device' },
-      { no:3,  waktu:'15/4/2026, 17:55:44', jenis:'Truck/Pickup', confidence:'63.0%', sumber:'IoT Device' },
-      { no:4,  waktu:'15/4/2026, 17:55:44', jenis:'Mobil',        confidence:'63.0%', sumber:'IoT Device' },
-      { no:5,  waktu:'15/4/2026, 17:55:44', jenis:'Mobil',        confidence:'63.0%', sumber:'IoT Device' },
-      { no:6,  waktu:'15/4/2026, 17:55:44', jenis:'Truck/Pickup', confidence:'63.0%', sumber:'IoT Device' },
-      { no:7,  waktu:'15/4/2026, 17:55:44', jenis:'Truck/Pickup', confidence:'63.0%', sumber:'IoT Device' },
-      { no:8,  waktu:'15/4/2026, 17:55:44', jenis:'Mobil',        confidence:'63.0%', sumber:'IoT Device' },
-      { no:9,  waktu:'15/4/2026, 17:55:44', jenis:'Mobil',        confidence:'63.0%', sumber:'IoT Device' },
-      { no:10, waktu:'15/4/2026, 17:55:44', jenis:'Mobil',        confidence:'63.0%', sumber:'IoT Device' },
-    ];
+    // ── Inisialisasi Tanggal Hari Ini ──
+    function setDateInputs() {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('startDate').value = today;
+        document.getElementById('endDate').value = today;
+    }
+    setDateInputs();
 
-    function renderTable() {
-      const tbody = document.getElementById('tableBody');
-      tbody.innerHTML = rows.map(r => {
-        const isTruck  = r.jenis === 'Truck/Pickup';
-        const badgeCls = isTruck
-          ? 'bg-orange/20 text-orange border border-orange/40'
-          : 'bg-green/20 text-green border border-green/40';
-        return `
-          <tr class="border-b border-divider transition-colors cursor-default">
-            <td class="text-center px-4 py-2.5 text-muted">${r.no}</td>
-            <td class="text-center px-4 py-2.5 text-white/80 font-mono text-[10px]">${r.waktu}</td>
-            <td class="text-center px-4 py-2.5">
-              <span class="inline-block text-[10px] font-semibold px-2.5 py-0.5 rounded ${badgeCls}">
-                ${r.jenis}
-              </span>
-            </td>
-            <td class="text-center px-4 py-2.5 text-white/70">${r.confidence}</td>
-            <td class="text-center px-4 py-2.5 text-muted">${r.sumber}</td>
-          </tr>`;
-      }).join('');
+    // ── Variabel Global Export ──
+    let currentTableData = [];
+
+    // ── Fetch GraphQL Data ──
+    async function fetchLaporan() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const vehicleType = document.getElementById('vehicleType').value;
+
+        // Validasi
+        if (!startDate || !endDate) {
+            alert('Silakan pilih rentang tanggal.');
+            return;
+        }
+
+        const btnFilter = document.getElementById('btnFilter');
+        const oldText = btnFilter.innerHTML;
+        btnFilter.innerHTML = `<svg class="w-3.5 h-3.5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg> Proses...`;
+        btnFilter.disabled = true;
+
+        const query = `
+            query GetLaporan($startDate: String!, $endDate: String!, $vehicleType: String) {
+                laporanKendaraan(startDate: $startDate, endDate: $endDate, vehicleType: $vehicleType) {
+                    ringkasan {
+                        total
+                        rataRataPerHari
+                        puncakTertinggi {
+                            jam
+                            jumlah
+                        }
+                    }
+                    data {
+                        id
+                        vehicle_type
+                        confidence_score
+                        detected_at
+                        device_id
+                    }
+                }
+            }
+        `;
+
+        try {
+            const response = await fetch('/graphql', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    query: query,
+                    variables: { startDate, endDate, vehicleType }
+                })
+            });
+
+            const result = await response.json();
+            if (result.errors) throw new Error(result.errors[0].message);
+
+            const report = result.data.laporanKendaraan;
+            
+            // 1. Update Stat Cards
+            document.getElementById('summaryTotal').innerText = report.ringkasan.total;
+            document.getElementById('summaryAvg').innerText = report.ringkasan.rataRataPerHari;
+            
+            const peak = report.ringkasan.puncakTertinggi;
+            if(peak && peak.jam !== '-') {
+                document.getElementById('summaryPeak').innerHTML = `${peak.jam} <span class="text-xl text-muted font-semibold">(${peak.jumlah})</span>`;
+            } else {
+                document.getElementById('summaryPeak').innerHTML = `--:-- <span class="text-xl text-muted font-semibold">(0)</span>`;
+            }
+
+            // 2. Update Table
+            currentTableData = report.data; // Simpan untuk export CSV
+            const tbody = document.getElementById('tableBody');
+            
+            if (currentTableData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-muted italic">Tidak ada data kendaraan ditemukan pada rentang tanggal ini.</td></tr>`;
+            } else {
+                tbody.innerHTML = currentTableData.map((log, index) => {
+                    const dateObj = new Date(log.detected_at);
+                    const tgl = `${dateObj.getDate()}/${dateObj.getMonth()+1}/${dateObj.getFullYear()}`;
+                    const jam = `${String(dateObj.getHours()).padStart(2,'0')}:${String(dateObj.getMinutes()).padStart(2,'0')}:${String(dateObj.getSeconds()).padStart(2,'0')}`;
+                    const formattedDate = `${tgl}, ${jam}`;
+
+                    const vType = log.vehicle_type ? log.vehicle_type.toLowerCase() : '';
+                    const isTruck = vType === 'truk' || vType === 'truck' || vType === 'pickup';
+                    const displayJenis = isTruck ? 'Truck/Pickup' : 'Mobil';
+                    
+                    const badgeCls = isTruck
+                        ? 'bg-orange/20 text-orange border border-orange/40'
+                        : 'bg-green/20 text-green border border-green/40';
+
+                    // Convert float to percentage
+                    let conf = log.confidence_score;
+                    if(conf <= 1 && conf > 0) conf = conf * 100;
+                    const confidenceText = conf.toFixed(1) + '%';
+
+                    return `
+                    <tr class="border-b border-divider transition-colors cursor-default">
+                        <td class="text-center px-4 py-2.5 text-muted w-14">${index + 1}</td>
+                        <td class="text-center px-4 py-2.5 text-white/80 font-mono text-[10px] w-1/4">${formattedDate}</td>
+                        <td class="text-center px-4 py-2.5 w-1/4">
+                            <span class="inline-block text-[10px] font-semibold px-2.5 py-0.5 rounded capitalize ${badgeCls}">
+                                ${displayJenis}
+                            </span>
+                        </td>
+                        <td class="text-center px-4 py-2.5 text-white/70 w-1/4">${confidenceText}</td>
+                        <td class="text-center px-4 py-2.5 text-muted w-1/4">${log.device_id || 'IoT Device'}</td>
+                    </tr>`;
+                }).join('');
+            }
+
+        } catch (error) {
+            console.error("Gagal mengambil laporan:", error);
+            document.getElementById('tableBody').innerHTML = `<tr><td colspan="5" class="text-center py-4 text-red-400">Gagal memuat data. Periksa koneksi atau console log.</td></tr>`;
+        } finally {
+            btnFilter.innerHTML = oldText;
+            btnFilter.disabled = false;
+        }
     }
 
-    renderTable();
+    // ── Export CSV Logic ──
+    function exportToCSV() {
+        if (currentTableData.length === 0) {
+            alert('Tidak ada data untuk diexport.');
+            return;
+        }
+
+        let csvContent = "No,Waktu Masuk,Jenis Kendaraan,Confidence,Sumber\n";
+        
+        currentTableData.forEach((log, index) => {
+            const dateObj = new Date(log.detected_at);
+            const dateStr = `${dateObj.getDate()}/${dateObj.getMonth()+1}/${dateObj.getFullYear()} ${dateObj.getHours()}:${dateObj.getMinutes()}:${dateObj.getSeconds()}`;
+            
+            let conf = log.confidence_score;
+            if(conf <= 1 && conf > 0) conf = conf * 100;
+            
+            csvContent += `${index + 1},"${dateStr}","${log.vehicle_type}","${conf.toFixed(1)}%","${log.device_id}"\n`;
+        });
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", `Laporan_Kendaraan_${document.getElementById('startDate').value}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // Event Listeners
+    document.getElementById('btnFilter').addEventListener('click', fetchLaporan);
+    document.addEventListener('DOMContentLoaded', fetchLaporan); // Auto fetch saat pertama kali load
   </script>
 
 </body>
