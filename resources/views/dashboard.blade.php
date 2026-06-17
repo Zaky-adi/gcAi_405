@@ -35,7 +35,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     html, body { height: 100%; overflow: hidden; }
-    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-track { background: #1a1a1a; }
     ::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
     .nav-link { transition: background .15s, color .15s; }
@@ -60,40 +60,51 @@
 </head>
 <body class="bg-surface font-sans text-white flex flex-col h-screen overflow-hidden">
 
-  <header class="flex items-center justify-between bg-sidebar border-b border-divider px-4 py-2.5 flex-shrink-0 z-10">
-    <div class="flex items-center gap-2.5">
-      <div class="w-9 h-9 bg-orange rounded-lg flex items-center justify-center flex-shrink-0">
-        <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
-          <circle cx="12" cy="13" r="3"/>
+  <header class="flex items-center justify-between bg-sidebar border-b border-divider px-4 py-2.5 flex-shrink-0 z-20 relative">
+    
+    <div class="flex items-center gap-3">
+      <button onclick="toggleSidebar()" class="md:hidden text-white hover:text-orange transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
         </svg>
-      </div>
-      <div class="leading-tight">
-        <p class="text-white text-sm font-bold leading-none">Gate Control <span class="text-orange">AI</span></p>
-        <p class="text-muted text-[9px] mt-0.5 leading-tight max-w-[160px]">Sistem Monitoring & Pengendalian Gerbang Portal Politeknik Negeri Batam</p>
+      </button>
+
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 bg-orange rounded-lg flex items-center justify-center flex-shrink-0">
+          <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+            <circle cx="12" cy="13" r="3"/>
+          </svg>
+        </div>
+        <div class="leading-tight hidden sm:block">
+          <p class="text-white text-sm font-bold leading-none">Gate Control <span class="text-orange">AI</span></p>
+          <p class="text-muted text-[9px] mt-0.5 leading-tight max-w-[160px]">Politeknik Negeri Batam</p>
+        </div>
       </div>
     </div>
 
-    <div class="hidden md:block text-center">
+    <div class="hidden lg:block text-center absolute left-1/2 transform -translate-x-1/2">
       <p class="text-white text-base font-semibold leading-none">Dashboard Monitoring</p>
       <p class="text-muted text-xs mt-0.5">Ringkasan real-time kendaraan masuk</p>
     </div>
 
     <div class="flex items-center gap-3">
-      <button class="flex items-center gap-1.5 bg-[#2a1a1a] border border-red-800 text-red-400 rounded-md px-3 py-1 text-xs font-medium">
+      <button class="hidden sm:flex items-center gap-1.5 bg-[#2a1a1a] border border-red-800 text-red-400 rounded-md px-3 py-1 text-xs font-medium">
         <span class="pulse-dot"></span>
         Standby
       </button>
       <div class="text-right leading-tight">
-        <p id="clock" class="text-white text-lg font-bold tracking-widest leading-none">00:00:00</p>
-        <p id="dateline" class="text-muted text-[10px] mt-0.5">Memuat Tanggal...</p>
+        <p id="clock" class="text-white text-base sm:text-lg font-bold tracking-widest leading-none">00:00:00</p>
+        <p id="dateline" class="text-muted text-[9px] sm:text-[10px] mt-0.5">Memuat Tanggal...</p>
       </div>
     </div>
   </header>
 
-  <div class="flex flex-1 overflow-hidden">
+  <div class="flex flex-1 overflow-hidden relative">
 
-    <aside class="w-44 bg-sidebar border-r border-divider flex flex-col flex-shrink-0 overflow-y-auto py-3">
+    <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/60 z-30 hidden md:hidden transition-opacity"></div>
+
+    <aside id="appSidebar" class="absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out z-40 w-52 md:w-44 bg-sidebar border-r border-divider flex flex-col flex-shrink-0 overflow-y-auto py-3 h-full">
       <p class="text-muted text-[9px] font-semibold uppercase tracking-widest px-4 mb-2">Menu Utama</p>
       <nav class="flex flex-col gap-0.5 px-2">
         <a href="{{ url('/dashboard') }}" class="nav-link active flex items-center gap-2.5 rounded-md px-3 py-2 text-xs font-medium text-white">
@@ -148,16 +159,14 @@
       </div>
     </aside>
 
-    <main class="flex-1 overflow-y-auto p-4 flex flex-col gap-4 bg-surface">
+    <main class="flex-1 overflow-y-auto p-4 flex flex-col gap-4 bg-surface md:ml-0">
 
-      <div class="grid grid-cols-4 gap-3 flex-shrink-0">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 flex-shrink-0">
         <div class="stat-card bg-card rounded-xl p-4 flex flex-col gap-2 border border-divider">
           <div class="flex items-center justify-between">
             <span class="text-muted text-[10px] font-semibold uppercase tracking-wider">Hari Ini</span>
             <div class="w-7 h-7 bg-[#1a3a2a] rounded-lg flex items-center justify-center">
-              <svg class="w-4 h-4 text-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-              </svg>
+              <svg class="w-4 h-4 text-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
             </div>
           </div>
           <p id="stat-hari-ini" class="text-white text-3xl font-bold leading-none">...</p>
@@ -168,15 +177,12 @@
           <div class="flex items-center justify-between">
             <span class="text-muted text-[10px] font-semibold uppercase tracking-wider">Minggu Ini</span>
             <div class="w-7 h-7 bg-[#1a2a3a] rounded-lg flex items-center justify-center">
-              <svg class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
-              </svg>
+              <svg class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
             </div>
           </div>
           <p id="stat-minggu-ini" class="text-white text-3xl font-bold leading-none">...</p>
           <p id="stat-minggu-persen" class="text-green text-[11px] flex items-center gap-1">
-            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
-            0%
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg> 0%
           </p>
         </div>
 
@@ -184,11 +190,7 @@
           <div class="flex items-center justify-between">
             <span class="text-muted text-[10px] font-semibold uppercase tracking-wider">Mobil</span>
             <div class="w-7 h-7 bg-[#1a3a2a] rounded-lg flex items-center justify-center">
-              <svg class="w-4 h-4 text-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="1" y="3" width="15" height="13" rx="2"/>
-                <path d="M16 8h4l3 3v5h-7V8z"/>
-                <circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
-              </svg>
+              <svg class="w-4 h-4 text-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
             </div>
           </div>
           <p id="stat-mobil" class="text-white text-3xl font-bold leading-none">...</p>
@@ -199,10 +201,7 @@
           <div class="flex items-center justify-between">
             <span class="text-muted text-[10px] font-semibold uppercase tracking-wider">Truck/Pickup</span>
             <div class="w-7 h-7 bg-[#3a2a1a] rounded-lg flex items-center justify-center">
-              <svg class="w-4 h-4 text-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M1 3h15v13H1zM16 8h4l3 3v5h-7V8z"/>
-                <circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
-              </svg>
+              <svg class="w-4 h-4 text-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
             </div>
           </div>
           <p id="stat-truk" class="text-white text-3xl font-bold leading-none">...</p>
@@ -210,14 +209,10 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-3 gap-3 flex-shrink-0" style="min-height:230px">
-        <div class="col-span-2 bg-card border border-divider rounded-xl flex items-center justify-center">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 flex-shrink-0" style="min-height:230px">
+        <div class="col-span-1 lg:col-span-2 bg-card border border-divider rounded-xl flex items-center justify-center py-10 lg:py-0">
           <div class="text-center">
-            <svg class="w-10 h-10 text-divider mx-auto mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
-              <circle cx="12" cy="13" r="3"/>
-              <line x1="4" y1="4" x2="20" y2="20" stroke="currentColor"/>
-            </svg>
+            <svg class="w-10 h-10 text-divider mx-auto mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/><line x1="4" y1="4" x2="20" y2="20" stroke="currentColor"/></svg>
             <p class="text-muted text-xs italic">Menunggu streaming CCTV...</p>
           </div>
         </div>
@@ -225,48 +220,34 @@
         <div class="bg-card border border-divider rounded-xl p-4 flex flex-col">
           <p class="text-white text-xs font-semibold mb-0.5">Distribusi Jenis</p>
           <p class="text-muted text-[10px] mb-3">Persentase kendaraan hari ini</p>
-          <div class="flex-1 flex items-center justify-center">
+          <div class="flex-1 flex items-center justify-center min-h-[160px]">
             <canvas id="donutChart" width="160" height="160" style="max-width:160px;max-height:160px;"></canvas>
           </div>
           <div class="flex flex-col gap-1.5 mt-3">
             <div class="flex items-center justify-between">
-              <div class="flex items-center gap-1.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-green flex-shrink-0"></span>
-                <span class="text-muted text-[10px]">Mobil</span>
-              </div>
+              <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-green flex-shrink-0"></span><span class="text-muted text-[10px]">Mobil</span></div>
               <span id="legend-mobil" class="text-white text-[10px] font-semibold">0%</span>
             </div>
             <div class="flex items-center justify-between">
-              <div class="flex items-center gap-1.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-orange flex-shrink-0"></span>
-                <span class="text-muted text-[10px]">Truk/Pickup</span>
-              </div>
+              <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-orange flex-shrink-0"></span><span class="text-muted text-[10px]">Truk/Pickup</span></div>
               <span id="legend-truk" class="text-white text-[10px] font-semibold">0%</span>
             </div>
             <div class="flex items-center justify-between">
-              <div class="flex items-center gap-1.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-[#444] flex-shrink-0"></span>
-                <span class="text-muted text-[10px]">Lainnya</span>
-              </div>
+              <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#444] flex-shrink-0"></span><span class="text-muted text-[10px]">Lainnya</span></div>
               <span id="legend-lainnya" class="text-white text-[10px] font-semibold">0%</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-3 flex-shrink-0">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 flex-shrink-0">
         <div class="bg-card border border-divider rounded-xl p-4">
           <div class="flex items-center justify-between mb-3">
             <div>
               <p class="text-white text-xs font-semibold">Aktivitas Terbaru</p>
               <p class="text-muted text-[10px]">5 deteksi terakhir</p>
             </div>
-            <a href="#" class="text-orange text-[11px] font-medium flex items-center gap-1 hover:underline">
-              Lihat semua
-              <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-              </svg>
-            </a>
+            <a href="#" class="text-orange text-[11px] font-medium flex items-center gap-1 hover:underline">Lihat semua</a>
           </div>
           <div id="aktivitas-container" class="flex flex-col divide-y divide-divider">
             <p class="text-muted text-xs italic py-2">Memuat data...</p>
@@ -285,11 +266,25 @@
   </div>
 
   <script>
+    /* ── Mobile Sidebar Toggle Logic ── */
+    function toggleSidebar() {
+        const sidebar = document.getElementById('appSidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        
+        sidebar.classList.toggle('-translate-x-full');
+        if (overlay.classList.contains('hidden')) {
+            overlay.classList.remove('hidden');
+            setTimeout(() => overlay.classList.add('opacity-100'), 10);
+        } else {
+            overlay.classList.remove('opacity-100');
+            setTimeout(() => overlay.classList.add('hidden'), 300);
+        }
+    }
+
     /* ── Autentikasi Check ── */
     const token = localStorage.getItem('firebase_token');
     const uid = localStorage.getItem('firebase_uid');
     
-    // Redirect ke login jika tidak ada token
     if (!token) {
         window.location.href = "{{ url('/login') }}";
     }
@@ -324,7 +319,7 @@
       data: {
         labels: ['Mobil', 'Truk/Pickup', 'Lainnya'],
         datasets: [{
-          data: [0, 0, 0], // Data awal kosong, akan diisi GraphQL
+          data: [0, 0, 0], // Akan diisi dari GraphQL
           backgroundColor: ['#22c55e', '#f97316', '#3a3a3a'],
           borderWidth: 0,
           hoverOffset: 4,
@@ -336,9 +331,7 @@
         plugins: {
           legend: { display: false },
           tooltip: {
-            callbacks: {
-              label: (ctx) => ` ${ctx.label}: ${ctx.parsed}%`,
-            },
+            callbacks: { label: (ctx) => ` ${ctx.label}: ${ctx.parsed}%` },
             backgroundColor: '#1e1e1e',
             titleColor: '#fff',
             bodyColor: '#aaa',
@@ -350,34 +343,21 @@
       },
     });
 
-    /* ── Integrasi GraphQL ── */
+    /* ── Integrasi GraphQL Fetch Data ── */
     async function fetchDashboardData() {
         const query = `
             query {
                 totalKendaraanMasukHariIni
-                totalKendaraanMasukMingguIni {
-                    total
-                    persentase
-                }
+                totalKendaraanMasukMingguIni { total persentase }
                 totalMobilHariIni
                 totalTrukHariIni
-                aktivitasTerbaru {
-                    id
-                    vehicle_type
-                    detected_at
-                }
-                statusSistem {
-                    id
-                    nama
-                    deskripsi
-                    status_text
-                    is_active
-                }
+                aktivitasTerbaru { id vehicle_type detected_at }
+                statusSistem { id nama deskripsi status_text is_active }
             }
         `;
 
         try {
-            const response = await fetch('/graphql', { // Sesuaikan URL endpoint GraphQL kamu
+            const response = await fetch('/graphql', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -395,24 +375,20 @@
 
             const data = result.data;
 
-            // 1. Update Stat Cards (Angka)
+            // 1. Update Stat Cards
             document.getElementById('stat-hari-ini').innerText = data.totalKendaraanMasukHariIni;
             document.getElementById('stat-minggu-ini').innerText = data.totalKendaraanMasukMingguIni.total;
             document.getElementById('stat-mobil').innerText = data.totalMobilHariIni;
             document.getElementById('stat-truk').innerText = data.totalTrukHariIni;
 
-            // Update Persentase Minggu Ini & SVG Panah Naik/Turun
+            // Persentase
             const persenMingguIni = data.totalKendaraanMasukMingguIni.persentase;
             const isNaik = persenMingguIni >= 0;
             const persentaseEl = document.getElementById('stat-minggu-persen');
-            
             persentaseEl.className = `${isNaik ? 'text-green' : 'text-red-400'} text-[11px] flex items-center gap-1`;
             persentaseEl.innerHTML = `
                 <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    ${isNaik 
-                        ? '<polyline points="18 15 12 9 6 15"/>' // Panah Naik
-                        : '<polyline points="6 9 12 15 18 9"/>'  // Panah Turun
-                    }
+                    ${isNaik ? '<polyline points="18 15 12 9 6 15"/>' : '<polyline points="6 9 12 15 18 9"/>'}
                 </svg>
                 ${isNaik ? '+' : ''}${persenMingguIni}%
             `;
@@ -422,7 +398,7 @@
             const mobil = data.totalMobilHariIni;
             const truk = data.totalTrukHariIni;
             let lainnya = total - mobil - truk;
-            if(lainnya < 0) lainnya = 0; // Fallback matematis
+            if(lainnya < 0) lainnya = 0; 
 
             let pMobil = total > 0 ? Math.round((mobil / total) * 100) : 0;
             let pTruk = total > 0 ? Math.round((truk / total) * 100) : 0;
@@ -435,9 +411,9 @@
             document.getElementById('legend-truk').innerText = pTruk + '%';
             document.getElementById('legend-lainnya').innerText = pLainnya + '%';
 
-            // 3. Render Aktivitas Terbaru (Maksimal 5)
+            // 3. Render Aktivitas Terbaru
             const aktivitasContainer = document.getElementById('aktivitas-container');
-            aktivitasContainer.innerHTML = ''; // Kosongkan placeholder
+            aktivitasContainer.innerHTML = ''; 
 
             if (data.aktivitasTerbaru && data.aktivitasTerbaru.length > 0) {
                 data.aktivitasTerbaru.forEach(log => {
@@ -445,7 +421,8 @@
                     const tgl = `${dateObj.getDate()}/${dateObj.getMonth()+1}/${dateObj.getFullYear()}`;
                     const jam = `${String(dateObj.getHours()).padStart(2,'0')}:${String(dateObj.getMinutes()).padStart(2,'0')}:${String(dateObj.getSeconds()).padStart(2,'0')}`;
                     
-                    const isTruk = log.vehicle_type.toLowerCase() === 'truk' || log.vehicle_type.toLowerCase() === 'truck' || log.vehicle_type.toLowerCase() === 'pickup';
+                    const vType = log.vehicle_type ? log.vehicle_type.toLowerCase() : '';
+                    const isTruk = vType === 'truk' || vType === 'truck' || vType === 'pickup';
                     
                     const iconBg = isTruk ? 'bg-[#3a2a1a]' : 'bg-[#1a3a2a]';
                     const iconColor = isTruk ? 'text-orange' : 'text-green';
@@ -456,9 +433,7 @@
                     const rowHTML = `
                     <div class="flex items-center gap-3 py-2.5">
                       <div class="w-8 h-8 ${iconBg} rounded-lg flex items-center justify-center flex-shrink-0">
-                        <svg class="w-4 h-4 ${iconColor}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                          ${svgIcon}
-                        </svg>
+                        <svg class="w-4 h-4 ${iconColor}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${svgIcon}</svg>
                       </div>
                       <div class="flex-1 min-w-0">
                         <p class="text-white text-[11px] font-medium capitalize">${log.vehicle_type}</p>
@@ -480,14 +455,10 @@
             if (data.statusSistem && data.statusSistem.length > 0) {
                 data.statusSistem.forEach(sys => {
                     const badgeBg = sys.is_active ? 'bg-green/20 text-green' : 'bg-red-500/20 text-red-400';
-                    
-                    // Gunakan icon default/netral yang sesuai dengan design jika tidak mau melacak icon satu persatu dari db
                     const rowHTML = `
                     <div class="flex items-center gap-3">
                       <div class="w-9 h-9 bg-[#2a2a2a] rounded-lg flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                          <rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/>
-                        </svg>
+                        <svg class="w-5 h-5 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
                       </div>
                       <div class="flex-1 min-w-0">
                         <p class="text-white text-[11px] font-medium">${sys.nama}</p>
@@ -495,7 +466,6 @@
                       </div>
                       <span class="badge ${badgeBg}">${sys.status_text}</span>
                     </div>`;
-
                     statusContainer.insertAdjacentHTML('beforeend', rowHTML);
                 });
             }
@@ -505,7 +475,6 @@
         }
     }
 
-    // Panggil fetch saat halaman dimuat
     document.addEventListener('DOMContentLoaded', fetchDashboardData);
   </script>
 </body>
