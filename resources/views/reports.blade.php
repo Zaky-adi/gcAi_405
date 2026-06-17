@@ -29,9 +29,12 @@
   </script>
   <style>
     html, body { height: 100%; overflow: hidden; }
-    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    /* Scrollbar minimalis untuk tabel */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #1a1a1a; }
-    ::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: #444; border-radius: 6px; }
+    ::-webkit-scrollbar-thumb:hover { background: #555; }
+    
     .nav-link { transition: background .15s, color .15s; }
     .nav-link:hover { background: rgba(255,255,255,.06); }
     .nav-link.active { background: #333; color: #fff; }
@@ -159,20 +162,20 @@
         </div>
       </div>
 
-      <div class="bg-card border border-divider rounded-xl flex-1 flex flex-col overflow-hidden min-h-0">
-        <div class="flex-1 overflow-x-auto overflow-y-auto">
+      <div class="bg-card border border-divider rounded-xl flex-1 flex flex-col overflow-hidden min-h-[400px] shadow-sm relative">
+        <div class="flex-1 overflow-auto w-full h-full relative table-scroll">
           <table class="w-full text-[11px] min-w-[600px]">
-            <thead class="sticky top-0 bg-card border-b border-divider shadow-sm">
+            <thead class="sticky top-0 bg-card z-10">
               <tr class="text-muted uppercase tracking-wider">
-                <th class="text-center px-4 py-3 font-semibold w-14">No</th>
-                <th class="text-center px-4 py-3 font-semibold w-1/4">Waktu Masuk</th>
-                <th class="text-center px-4 py-3 font-semibold w-1/4">Jenis Kendaraan</th>
-                <th class="text-center px-4 py-3 font-semibold w-1/4">Confidence</th>
-                <th class="text-center px-4 py-3 font-semibold w-1/4">Sumber</th>
+                <th class="text-center px-4 py-3 font-semibold w-14 border-b border-divider">No</th>
+                <th class="text-center px-4 py-3 font-semibold w-1/4 border-b border-divider">Waktu Masuk</th>
+                <th class="text-center px-4 py-3 font-semibold w-1/4 border-b border-divider">Jenis Kendaraan</th>
+                <th class="text-center px-4 py-3 font-semibold w-1/4 border-b border-divider">Confidence</th>
+                <th class="text-center px-4 py-3 font-semibold w-1/4 border-b border-divider">Sumber</th>
               </tr>
             </thead>
-            <tbody id="tableBody">
-              <tr><td colspan="5" class="text-center py-4 text-muted">Memuat data laporan...</td></tr>
+            <tbody id="tableBody" class="divide-y divide-divider/50">
+              <tr><td colspan="5" class="text-center py-6 text-muted">Memuat data laporan...</td></tr>
             </tbody>
           </table>
         </div>
@@ -311,7 +314,7 @@
                     const confidenceText = conf.toFixed(1) + '%';
 
                     return `
-                    <tr class="border-b border-divider transition-colors cursor-default">
+                    <tr class="transition-colors cursor-default">
                         <td class="text-center px-4 py-2.5 text-muted">${index + 1}</td>
                         <td class="text-center px-4 py-2.5 text-white/80 font-mono text-[10px]">${formattedDate}</td>
                         <td class="text-center px-4 py-2.5">
@@ -325,7 +328,7 @@
 
         } catch (error) {
             console.error("Gagal mengambil laporan:", error);
-            document.getElementById('tableBody').innerHTML = `<tr><td colspan="5" class="text-center py-4 text-red-400">Gagal memuat data. Periksa koneksi ke server.</td></tr>`;
+            document.getElementById('tableBody').innerHTML = `<tr><td colspan="5" class="text-center py-6 text-red-400">Gagal memuat data. Periksa koneksi ke server.</td></tr>`;
         } finally {
             btnFilter.innerHTML = `Filter`;
             btnFilter.disabled = false;
