@@ -138,121 +138,21 @@
         </a>
       </nav>
 
+      <div class="mt-auto px-2 pb-4">
+        <button onclick="logout()" class="w-full flex items-center gap-2.5 rounded-md px-3 py-2 text-xs font-medium text-red-400 hover:bg-red-500/10 transition-colors">
+          <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          Keluar
+        </button>
+      </div>
+
     </aside>
 
     <main class="flex-1 overflow-y-auto p-4 sm:p-5 flex flex-col gap-4 bg-surface md:ml-0">
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-
-        <div class="bg-card border border-divider rounded-xl p-4 flex flex-col gap-3">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2.5">
-              <div class="w-8 h-8 rounded-lg bg-orange/20 border border-orange/30 flex items-center justify-center flex-shrink-0">
-                <svg class="w-4 h-4 text-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
-              </div>
-              <div>
-                <p class="text-white text-xs font-semibold leading-none">Raspberry Pi 4</p>
-                <p class="text-muted text-[9px] mt-0.5">Edge Device — Model B 4GB</p>
-              </div>
-            </div>
-            <span class="flex items-center gap-1 bg-green/15 border border-green/30 text-green text-[9px] font-semibold px-2 py-0.5 rounded-full">
-              <span class="w-1.5 h-1.5 rounded-full bg-green inline-block" style="animation: pulse-anim 1.4s infinite;"></span>
-              Online
-            </span>
-          </div>
-
-          <div class="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[10px]">
-            <div><p class="text-muted leading-none">CPU Temp</p><p class="text-white font-medium mt-0.5" data-sensor="cpu-temp">52.3°C</p></div>
-            <div><p class="text-muted leading-none">CPU Usage</p><p class="text-white font-medium mt-0.5">67%</p></div>
-            <div><p class="text-muted leading-none">RAM</p><p class="text-white font-medium mt-0.5">2.1 / 4 GB</p></div>
-            <div><p class="text-muted leading-none">Storage</p><p class="text-white font-medium mt-0.5">12.4 / 32 GB</p></div>
-            <div><p class="text-muted leading-none">IP Address</p><p class="text-white font-medium mt-0.5">192.168.1.100</p></div>
-            <div><p class="text-muted leading-none">Uptime</p><p class="text-white font-medium mt-0.5">3h 42m</p></div>
-          </div>
-
-          <div>
-            <div class="flex justify-between text-[9px] text-muted mb-1">
-              <span>CPU Temp</span>
-              <span class="text-orange" data-sensor="cpu-temp">52.3°C</span>
-            </div>
-            <div class="w-full h-1 bg-inputbg rounded-full overflow-hidden">
-              <div class="h-full bg-orange rounded-full transition-all duration-500" data-bar="cpu" style="width: 52%"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-card border border-divider rounded-xl p-4 flex flex-col gap-3">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2.5">
-              <div class="w-8 h-8 rounded-lg bg-blue/20 border border-blue/30 flex items-center justify-center flex-shrink-0">
-                <svg class="w-4 h-4 text-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
-              </div>
-              <div>
-                <p class="text-white text-xs font-semibold leading-none">Webcam Full HD</p>
-                <p class="text-muted text-[9px] mt-0.5">Hikvip — Portal Gerbang</p>
-              </div>
-            </div>
-            <span class="flex items-center gap-1 bg-green/15 border border-green/30 text-green text-[9px] font-semibold px-2 py-0.5 rounded-full">
-              <span class="w-1.5 h-1.5 rounded-full bg-green inline-block" style="animation: pulse-anim 1.4s infinite;"></span>
-              Online
-            </span>
-          </div>
-
-          <div class="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[10px]">
-            <div><p class="text-muted leading-none">Resolusi</p><p class="text-white font-medium mt-0.5">1920×1080</p></div>
-            <div><p class="text-muted leading-none">FPS</p><p class="text-white font-medium mt-0.5">30 fps</p></div>
-            <div><p class="text-muted leading-none">Koneksi</p><p class="text-white font-medium mt-0.5">USB 3.0</p></div>
-            <div><p class="text-muted leading-none">Lokasi</p><p class="text-white font-medium mt-0.5">Portal PN Batam</p></div>
-            <div class="col-span-2"><p class="text-muted leading-none">Status</p><p class="text-green font-medium mt-0.5">Streaming aktif</p></div>
-          </div>
-
-          <div>
-            <div class="flex justify-between text-[9px] text-muted mb-1">
-              <span>Frame Rate</span>
-              <span class="text-blue">30 / 30 fps</span>
-            </div>
-            <div class="w-full h-1 bg-inputbg rounded-full overflow-hidden">
-              <div class="h-full bg-blue rounded-full" style="width: 100%"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-card border border-divider rounded-xl p-4 flex flex-col gap-3">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2.5">
-              <div class="w-8 h-8 rounded-lg bg-green/20 border border-green/30 flex items-center justify-center flex-shrink-0">
-                <svg class="w-4 h-4 text-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-              </div>
-              <div>
-                <p class="text-white text-xs font-semibold leading-none">Sensor &amp; Indikator</p>
-                <p class="text-muted text-[9px] mt-0.5">LDR · LED · Buzzer</p>
-              </div>
-            </div>
-            <span class="flex items-center gap-1 bg-green/15 border border-green/30 text-green text-[9px] font-semibold px-2 py-0.5 rounded-full">
-              <span class="w-1.5 h-1.5 rounded-full bg-green inline-block" style="animation: pulse-anim 1.4s infinite;"></span>
-              Online
-            </span>
-          </div>
-
-          <div class="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[10px]">
-            <div><p class="text-muted leading-none">Sensor LDR</p><p class="text-white font-medium mt-0.5" data-sensor="ldr">742 lux</p></div>
-            <div><p class="text-muted leading-none">LED Indikator</p><p class="text-white font-medium mt-0.5">Aktif</p></div>
-            <div><p class="text-muted leading-none">Buzzer</p><p class="text-white font-medium mt-0.5">Standby</p></div>
-            <div><p class="text-muted leading-none">Kondisi</p><p class="text-white font-medium mt-0.5">Siang (Cukup)</p></div>
-            <div class="col-span-2"><p class="text-muted leading-none">Protokol</p><p class="text-white font-medium mt-0.5">MQTT</p></div>
-          </div>
-
-          <div>
-            <div class="flex justify-between text-[9px] text-muted mb-1">
-              <span>Intensitas Cahaya</span>
-              <span class="text-green" data-sensor="ldr">742 lux</span>
-            </div>
-            <div class="w-full h-1 bg-inputbg rounded-full overflow-hidden">
-              <div class="h-full bg-green rounded-full transition-all duration-500" data-bar="ldr" style="width: 74%"></div>
-            </div>
-          </div>
-        </div>
-
+      <div id="deviceContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+         <p class="text-muted text-sm italic col-span-3 text-center py-10">Memuat daftar perangkat dari database...</p>
       </div>
 
       <div class="bg-card border border-divider rounded-xl p-4 flex flex-col gap-3 mt-1">
@@ -294,6 +194,16 @@
         }
     }
 
+    /* ── Autentikasi Check ── */
+    const token = localStorage.getItem('firebase_token');
+    if (!token) window.location.href = "{{ url('/login') }}";
+
+    function logout() {
+        localStorage.removeItem('firebase_token');
+        localStorage.removeItem('firebase_uid');
+        window.location.href = "{{ url('/login') }}";
+    }
+
     // ── Live clock ──
     function updateClock() {
       const now    = new Date();
@@ -307,6 +217,164 @@
     }
     updateClock();
     setInterval(updateClock, 1000);
+
+    // ── FETCH DEVICES FROM GRAPHQL API ──
+    async function fetchDevices() {
+        const query = `
+            query {
+                devices {
+                    id
+                    device_name
+                    location
+                    is_active
+                }
+            }
+        `;
+
+        try {
+            const response = await fetch('/graphql', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ query })
+            });
+
+            const result = await response.json();
+            if (result.errors) throw new Error(result.errors[0].message);
+
+            const devices = result.data.devices;
+            const container = document.getElementById('deviceContainer');
+            container.innerHTML = '';
+
+            if (devices.length === 0) {
+                container.innerHTML = `<p class="text-muted text-sm italic col-span-3 text-center py-10">Belum ada perangkat yang terdaftar di database.</p>`;
+                return;
+            }
+
+            devices.forEach(dev => {
+                const nameLower = dev.device_name.toLowerCase();
+                const isOnline = dev.is_active;
+
+                // Set Badge Status Aktif/Tidak
+                const badgeHTML = isOnline
+                    ? `<span class="flex items-center gap-1 bg-green/15 border border-green/30 text-green text-[9px] font-semibold px-2 py-0.5 rounded-full">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green inline-block" style="animation: pulse-anim 1.4s infinite;"></span>Online</span>`
+                    : `<span class="flex items-center gap-1 bg-red-500/15 border border-red-500/30 text-red-400 text-[9px] font-semibold px-2 py-0.5 rounded-full">Offline</span>`;
+
+                let cardHTML = '';
+
+                // DETEKSI OTOMATIS TEMA KARTU BERDASARKAN NAMA PERANGKAT
+                if (nameLower.includes('pi') || nameLower.includes('edge') || nameLower.includes('server')) {
+                    // TEMA 1: EDGE DEVICE / CPU (Warna Orange)
+                    cardHTML = `
+                    <div class="bg-card border border-divider rounded-xl p-4 flex flex-col gap-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-lg bg-orange/20 border border-orange/30 flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-4 h-4 text-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
+                                </div>
+                                <div>
+                                    <p class="text-white text-xs font-semibold leading-none truncate w-32">${dev.device_name}</p>
+                                    <p class="text-muted text-[9px] mt-0.5 truncate w-32">${dev.location}</p>
+                                </div>
+                            </div>
+                            ${badgeHTML}
+                        </div>
+                        <div class="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[10px]">
+                            <div><p class="text-muted leading-none">CPU Temp</p><p class="text-white font-medium mt-0.5" data-sensor="cpu-temp">52.3°C</p></div>
+                            <div><p class="text-muted leading-none">CPU Usage</p><p class="text-white font-medium mt-0.5">67%</p></div>
+                            <div><p class="text-muted leading-none">RAM</p><p class="text-white font-medium mt-0.5">2.1 / 4 GB</p></div>
+                            <div class="col-span-2"><p class="text-muted leading-none">ID Sistem</p><p class="text-white font-mono text-[9px] mt-0.5">${dev.id}</p></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[9px] text-muted mb-1">
+                                <span>CPU Temp</span>
+                                <span class="text-orange" data-sensor="cpu-temp">52.3°C</span>
+                            </div>
+                            <div class="w-full h-1 bg-inputbg rounded-full overflow-hidden">
+                                <div class="h-full bg-orange rounded-full transition-all duration-500" data-bar="cpu" style="width: 52%"></div>
+                            </div>
+                        </div>
+                    </div>`;
+                } else if (nameLower.includes('cam') || nameLower.includes('cctv') || nameLower.includes('kamera')) {
+                    // TEMA 2: KAMERA CCTV (Warna Biru)
+                    cardHTML = `
+                    <div class="bg-card border border-divider rounded-xl p-4 flex flex-col gap-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-lg bg-blue/20 border border-blue/30 flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-4 h-4 text-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+                                </div>
+                                <div>
+                                    <p class="text-white text-xs font-semibold leading-none truncate w-32">${dev.device_name}</p>
+                                    <p class="text-muted text-[9px] mt-0.5 truncate w-32">${dev.location}</p>
+                                </div>
+                            </div>
+                            ${badgeHTML}
+                        </div>
+                        <div class="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[10px]">
+                            <div><p class="text-muted leading-none">Resolusi</p><p class="text-white font-medium mt-0.5">1920×1080</p></div>
+                            <div><p class="text-muted leading-none">FPS</p><p class="text-white font-medium mt-0.5">30 fps</p></div>
+                            <div><p class="text-muted leading-none">ID Sistem</p><p class="text-white font-mono text-[9px] mt-0.5">${dev.id}</p></div>
+                            <div class="col-span-2"><p class="text-muted leading-none">Status</p><p class="${isOnline ? 'text-green' : 'text-red-400'} font-medium mt-0.5">${isOnline ? 'Streaming aktif' : 'Terputus'}</p></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[9px] text-muted mb-1">
+                                <span>Frame Rate</span>
+                                <span class="text-blue">${isOnline ? '30 / 30 fps' : '0 fps'}</span>
+                            </div>
+                            <div class="w-full h-1 bg-inputbg rounded-full overflow-hidden">
+                                <div class="h-full bg-blue rounded-full" style="width: ${isOnline ? '100%' : '0%'}"></div>
+                            </div>
+                        </div>
+                    </div>`;
+                } else {
+                    // TEMA 3: SENSOR / GENERAL (Warna Hijau)
+                    cardHTML = `
+                    <div class="bg-card border border-divider rounded-xl p-4 flex flex-col gap-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-lg bg-green/20 border border-green/30 flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-4 h-4 text-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                                </div>
+                                <div>
+                                    <p class="text-white text-xs font-semibold leading-none truncate w-32">${dev.device_name}</p>
+                                    <p class="text-muted text-[9px] mt-0.5 truncate w-32">${dev.location}</p>
+                                </div>
+                            </div>
+                            ${badgeHTML}
+                        </div>
+                        <div class="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[10px]">
+                            <div><p class="text-muted leading-none">Sensor LDR</p><p class="text-white font-medium mt-0.5" data-sensor="ldr">742 lux</p></div>
+                            <div><p class="text-muted leading-none">Indikator</p><p class="text-white font-medium mt-0.5">${isOnline ? 'Aktif' : 'Mati'}</p></div>
+                            <div><p class="text-muted leading-none">ID Sistem</p><p class="text-white font-mono text-[9px] mt-0.5">${dev.id}</p></div>
+                            <div class="col-span-2"><p class="text-muted leading-none">Protokol</p><p class="text-white font-medium mt-0.5">MQTT</p></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[9px] text-muted mb-1">
+                                <span>Intensitas Cahaya</span>
+                                <span class="text-green" data-sensor="ldr">${isOnline ? '742 lux' : '0 lux'}</span>
+                            </div>
+                            <div class="w-full h-1 bg-inputbg rounded-full overflow-hidden">
+                                <div class="h-full bg-green rounded-full transition-all duration-500" data-bar="ldr" style="width: ${isOnline ? '74%' : '0%'}"></div>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+
+                container.insertAdjacentHTML('beforeend', cardHTML);
+            });
+
+        } catch (error) {
+            console.error("Gagal memuat perangkat:", error);
+            document.getElementById('deviceContainer').innerHTML = `<p class="text-red-400 text-sm italic col-span-3 text-center py-10">Gagal terhubung ke server untuk memuat perangkat.</p>`;
+        }
+    }
+
+    // Panggil fetch data saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', fetchDevices);
 
     // ── Simulated MQTT log stream ──
     const mqttMessages = [
