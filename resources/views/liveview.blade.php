@@ -82,73 +82,64 @@
 </head>
 <body class="bg-surface font-sans text-white flex flex-col h-screen overflow-hidden">
 
-  <!-- ═══════════ TOP HEADER ═══════════ -->
-  <header class="flex items-center justify-between bg-sidebar border-b border-divider px-4 py-2.5 flex-shrink-0 z-10">
+  <header class="flex items-center justify-between bg-sidebar border-b border-divider px-4 py-2.5 flex-shrink-0 z-20 relative">
 
-    <!-- Logo -->
-    <div class="flex items-center gap-2.5">
-      <div class="w-9 h-9 bg-orange rounded-lg flex items-center justify-center flex-shrink-0">
-        <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
-          <circle cx="12" cy="13" r="3"/>
-        </svg>
-      </div>
-      <div class="leading-tight">
-        <p class="text-white text-sm font-bold leading-none">Gate Control <span class="text-orange">AI</span></p>
-        <p class="text-muted text-[9px] mt-0.5 leading-tight max-w-[160px]">Sistem Monitoring &amp; Pengendalian Gerbang Portal Politeknik Negeri Bukittinggi</p>
+    <div class="flex items-center gap-3">
+      <button onclick="toggleSidebar()" class="md:hidden text-white hover:text-orange transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 bg-orange rounded-lg flex items-center justify-center flex-shrink-0">
+          <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+            <circle cx="12" cy="13" r="3"/>
+          </svg>
+        </div>
+        <div class="leading-tight hidden sm:block">
+          <p class="text-white text-sm font-bold leading-none">Gate Control <span class="text-orange">AI</span></p>
+          <p class="text-muted text-[9px] mt-0.5 leading-tight max-w-[160px]">Sistem Monitoring &amp; Pengendalian Gerbang</p>
+        </div>
       </div>
     </div>
 
-    <!-- Center title -->
-    <div class="hidden md:block text-center">
+    <div class="hidden lg:block text-center absolute left-1/2 transform -translate-x-1/2">
       <p class="text-white text-base font-semibold leading-none">Live View</p>
       <p class="text-muted text-xs mt-0.5">Streaming CCTV/Camera — Portal Gerbang Politeknik</p>
     </div>
 
-    <!-- Right: standby + clock -->
     <div class="flex items-center gap-3">
-      <button class="flex items-center gap-1.5 bg-[#2a1a1a] border border-red-800 text-red-400 rounded-md px-3 py-1 text-xs font-medium">
+      <button class="hidden sm:flex items-center gap-1.5 bg-[#2a1a1a] border border-red-800 text-red-400 rounded-md px-3 py-1 text-xs font-medium">
         <span class="pulse-dot"></span>
         Standby
       </button>
       <div class="text-right leading-tight">
-        <p id="clock" class="text-white text-lg font-bold tracking-widest leading-none">22:15:54</p>
-        <p id="dateline" class="text-muted text-[10px] mt-0.5">Rabu, 15 April 2026</p>
+        <p id="clock" class="text-white text-base sm:text-lg font-bold tracking-widest leading-none">00:00:00</p>
+        <p id="dateline" class="text-muted text-[9px] sm:text-[10px] mt-0.5">Memuat Tanggal...</p>
       </div>
     </div>
 
   </header>
 
-  <!-- ═══════════ BODY ═══════════ -->
-  <div class="flex flex-1 overflow-hidden">
+  <div class="flex flex-1 overflow-hidden relative">
 
-    <!-- ── SIDEBAR ── -->
-    <aside class="w-44 bg-sidebar border-r border-divider flex flex-col flex-shrink-0 overflow-y-auto py-3">
+    <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/60 z-30 hidden md:hidden transition-opacity"></div>
+
+    <aside id="appSidebar" class="absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out z-40 w-52 md:w-44 bg-sidebar border-r border-divider flex flex-col flex-shrink-0 overflow-y-auto py-3 h-full">
 
       <p class="text-muted text-[9px] font-semibold uppercase tracking-widest px-4 mb-2">Menu Utama</p>
 
       <nav class="flex flex-col gap-0.5 px-2">
-        <!-- Dashboard -->
         <a href="{{ url('/dashboard') }}" class="nav-link flex items-center gap-2.5 rounded-md px-3 py-2 text-xs font-medium text-muted">
-          <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-            <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
-          </svg>
+          <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
           Dashboard
         </a>
-        <!-- Live View — ACTIVE -->
         <a href="{{ url('/liveview') }}" class="nav-link active flex items-center gap-2.5 rounded-md px-3 py-2 text-xs font-medium text-white">
-          <svg class="w-4 h-4 text-orange flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
-          </svg>
+          <svg class="w-4 h-4 text-orange flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
           Live view
         </a>
-        <!-- Laporan -->
         <a href="{{ url('/reports') }}" class="nav-link flex items-center gap-2.5 rounded-md px-3 py-2 text-xs font-medium text-muted">
-          <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-            <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
-          </svg>
+          <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
           Laporan Kendaraan
         </a>
       </nav>
@@ -157,48 +148,34 @@
 
       <nav class="flex flex-col gap-0.5 px-2">
         <a href="{{ url('/jadwal') }}" class="nav-link flex items-center gap-2.5 rounded-md px-3 py-2 text-xs font-medium text-muted">
-          <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-          </svg>
+          <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 16 14"/></svg>
           Jadwal Operasional
         </a>
         <a href="{{ url('/perangkat') }}" class="nav-link flex items-center gap-2.5 rounded-md px-3 py-2 text-xs font-medium text-muted">
-          <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/>
-            <line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/>
-            <line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/>
-            <line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/>
-            <line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/>
-          </svg>
+          <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
           Perangkat IoT
         </a>
       </nav>
 
     </aside>
 
-    <!-- ── MAIN CONTENT ── -->
-    <main class="flex-1 overflow-y-auto p-4 bg-surface">
+    <main class="flex-1 overflow-y-auto p-4 sm:p-5 bg-surface md:ml-0">
 
-      <div class="flex gap-3 h-full" style="min-height: 0;">
+      <div class="flex flex-col lg:flex-row gap-3 lg:h-full" style="min-height: 0;">
 
-        <!-- LEFT: Camera feed -->
-        <div class="flex-1 min-w-0 camera-bg border border-divider rounded-xl flex items-center justify-center relative" style="min-height: 420px;">
-          <!-- Corner brackets -->
+        <div class="flex-1 min-w-0 camera-bg border border-divider rounded-xl flex items-center justify-center relative min-h-[300px] sm:min-h-[420px]">
           <div class="cam-corner tl"></div>
           <div class="cam-corner tr"></div>
           <div class="cam-corner bl"></div>
           <div class="cam-corner br"></div>
 
-          <!-- Top-left live badge -->
           <div class="absolute top-3 left-10 flex items-center gap-1.5 bg-black/50 rounded px-2 py-1">
             <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse flex-shrink-0"></span>
             <span class="text-white text-[10px] font-semibold tracking-widest">LIVE</span>
           </div>
 
-          <!-- Camera label -->
           <div class="absolute top-3 right-10 text-muted text-[10px]">CAM — 01</div>
 
-          <!-- Center placeholder content -->
           <div class="text-center flex flex-col items-center gap-3 z-10">
             <svg class="w-14 h-14 text-[#3a3a3a]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
@@ -207,21 +184,17 @@
             <p class="text-[#3a3a3a] text-sm font-medium tracking-wide uppercase">CAMERA</p>
           </div>
 
-          <!-- Bottom bar -->
-          <div class="absolute bottom-0 left-0 right-0 bg-black/60 rounded-b-xl px-4 py-2 flex items-center justify-between">
-            <span class="text-muted text-[10px]">Portal Gerbang Utama — Politeknik Negeri Bukittinggi</span>
-            <span id="cam-time" class="text-muted text-[10px] font-mono">00:00:00</span>
+          <div class="absolute bottom-0 left-0 right-0 bg-black/60 rounded-b-xl px-4 py-2 flex flex-col sm:flex-row sm:items-center justify-between">
+            <span class="text-muted text-[9px] sm:text-[10px] truncate">Portal Gerbang Utama — Politeknik Negeri Batam</span>
+            <span id="cam-time" class="text-muted text-[9px] sm:text-[10px] font-mono mt-1 sm:mt-0">00:00:00</span>
           </div>
         </div>
 
-        <!-- RIGHT: Info panels -->
-        <div class="flex flex-col gap-3 w-56 flex-shrink-0">
+        <div class="flex flex-col gap-3 w-full lg:w-56 flex-shrink-0">
 
-          <!-- Statistik Live -->
           <div class="bg-card border border-divider rounded-xl p-4">
             <p class="text-white text-xs font-semibold mb-3">Statistik Live</p>
 
-            <!-- Total -->
             <div class="flex items-center justify-between mb-3">
               <span class="text-muted text-[11px]">Total Terdeteksi</span>
               <span class="text-white text-sm font-bold">14</span>
@@ -229,7 +202,6 @@
 
             <div class="h-px bg-divider mb-3"></div>
 
-            <!-- Mobil row -->
             <div class="flex items-center justify-between mb-2.5">
               <div class="flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-green flex-shrink-0"></span>
@@ -238,7 +210,6 @@
               <span class="text-white text-sm font-bold">11</span>
             </div>
 
-            <!-- Truck row -->
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-orange flex-shrink-0"></span>
@@ -247,7 +218,6 @@
               <span class="text-white text-sm font-bold">3</span>
             </div>
 
-            <!-- Mini progress bars -->
             <div class="mt-3 flex flex-col gap-1.5">
               <div>
                 <div class="flex justify-between mb-1">
@@ -270,39 +240,29 @@
             </div>
           </div>
 
-          <!-- Log Deteksi -->
-          <div class="bg-card border border-divider rounded-xl p-4 flex-1 flex flex-col min-h-0">
+          <div class="bg-card border border-divider rounded-xl p-4 lg:flex-1 flex flex-col min-h-[150px] lg:min-h-0">
             <p class="text-white text-xs font-semibold mb-3">Log Deteksi</p>
             <div class="flex-1 overflow-y-auto flex items-center justify-center">
               <p class="text-muted text-[11px] italic text-center">Menunggu deteksi...</p>
             </div>
           </div>
 
-          <!-- Info Model AI -->
           <div class="bg-card border border-divider rounded-xl p-4">
             <p class="text-white text-xs font-semibold mb-3">Info Model AI</p>
 
             <div class="flex flex-col gap-0 divide-y divide-divider">
-
-              <!-- Model -->
               <div class="flex items-center justify-between py-2">
                 <span class="text-muted text-[10px]">Model</span>
                 <span class="text-white text-[10px] font-medium">Computer Vision</span>
               </div>
-
-              <!-- Confidence -->
               <div class="flex items-center justify-between py-2">
                 <span class="text-muted text-[10px]">Confidence</span>
                 <span class="text-white text-[10px] font-medium">&ge; 60%</span>
               </div>
-
-              <!-- Method -->
               <div class="flex items-center justify-between py-2">
                 <span class="text-muted text-[10px]">Method</span>
                 <span class="text-white text-[10px] font-medium text-right leading-tight">Virtual line<br>Counting</span>
               </div>
-
-              <!-- Inference -->
               <div class="flex items-center justify-between py-2">
                 <span class="text-muted text-[10px]">Inference</span>
                 <div class="flex items-center gap-1.5">
@@ -310,20 +270,30 @@
                   <span class="text-white text-[10px] font-medium">~45ms</span>
                 </div>
               </div>
-
             </div>
           </div>
 
         </div>
-        <!-- end right panels -->
-
-      </div>
+        </div>
     </main>
 
   </div>
 
-  <!-- ═══════════ SCRIPTS ═══════════ -->
   <script>
+    /* ── Mobile Sidebar Toggle Logic ── */
+    function toggleSidebar() {
+        const sidebar = document.getElementById('appSidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        sidebar.classList.toggle('-translate-x-full');
+        if (overlay.classList.contains('hidden')) {
+            overlay.classList.remove('hidden');
+            setTimeout(() => overlay.classList.add('opacity-100'), 10);
+        } else {
+            overlay.classList.remove('opacity-100');
+            setTimeout(() => overlay.classList.add('hidden'), 300);
+        }
+    }
+
     // Live clock
     function updateClock() {
       const now = new Date();
@@ -343,5 +313,3 @@
 
 </body>
 </html>
-
-What do you want to create?
