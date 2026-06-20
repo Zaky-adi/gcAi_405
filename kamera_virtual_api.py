@@ -54,12 +54,24 @@ try:
         }
 
         try:
-            # Mengirim data langsung ke server Laravel kamu
+            # Mengirim data ke server Laravel
             response = requests.post(GRAPHQL_URL, json=payload, headers=headers, timeout=10)
+
+            # CEK STATUS HTTP DULU SEBELUM BACA JSON!
+            if response.status_code != 200:
+                print(f"\n[!] SERVER CRASH (HTTP {response.status_code})")
+                print("=== PESAN ERROR ASLI DARI SERVER ===")
+                # Mencetak 500 karakter pertama dari pesan error asli server
+                print(response.text[:500])
+                print("====================================\n")
+                continue # Langsung skip ke kendaraan berikutnya
+
             result = response.json()
 
             if "errors" in result:
-                print(f"[-] Gagal mengirim ({jenis_kendaraan}): {result['errors'][0]['message']}")
+                error_detail = result['errors'][0]
+                real_error = error_detail.get('debugMessage', error_detail['message'])
+                print(f"[-] Gagal mengirim ({jenis_kendaraan}): {real_error}")
             else:
                 print(f"[+] Deteksi terkirim ke server: {jenis_kendaraan.upper()} (Akurasi: {akurasi*100:.0f}%)")
 
