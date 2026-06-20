@@ -8,6 +8,16 @@ class CreateLogMutation
 {
     public function resolve($_, array $args)
     {
+
+    return [
+        'id' => '1',
+        'device_id' => 'TEST',
+        'vehicle_type' => 'TEST',
+        'confidence_score' => 1.0,
+        'detected_at' => now()->toIso8601String(),
+    ];
+
+
         try {
 
         dd(env('FIREBASE_PROJECT_ID'));
