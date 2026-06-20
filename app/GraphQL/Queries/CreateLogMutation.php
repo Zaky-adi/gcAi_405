@@ -14,6 +14,19 @@ class CreateLogMutation
 
         $firestore = app('firebase.firestore')->database();
 
+        $firestore
+            ->collection('vehicle_logs')
+            ->limit(1)
+            ->documents();
+
+        return [
+            'id' => '1',
+            'device_id' => 'OK',
+            'vehicle_type' => 'OK',
+            'confidence_score' => 1.0,
+            'detected_at' => 'CONNECTED'
+        ];
+
         $collection = $firestore->collection('vehicle_logs');
 
         $data = [
@@ -36,7 +49,7 @@ class CreateLogMutation
     } catch (\Throwable $e) {
 
         throw new \Exception(
-            $e->getMessage()
+            'FIREBASE ERROR: ' . $e->getMessage()
         );
     }
 
