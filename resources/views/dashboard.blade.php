@@ -247,7 +247,7 @@
               <p class="text-white text-xs font-semibold">Aktivitas Terbaru</p>
               <p class="text-muted text-[10px]">5 deteksi terakhir</p>
             </div>
-            <a href="#" class="text-orange text-[11px] font-medium flex items-center gap-1 hover:underline">Lihat semua</a>
+            <a href="{{ url('/reports') }}" class="text-orange text-[11px] font-medium flex items-center gap-1 hover:underline">Lihat semua</a>
           </div>
           <div id="aktivitas-container" class="flex flex-col divide-y divide-divider">
             <p class="text-muted text-xs italic py-2">Memuat data...</p>
@@ -319,7 +319,7 @@
       data: {
         labels: ['Mobil', 'Truk/Pickup', 'Lainnya'],
         datasets: [{
-          data: [0, 0, 0], // Akan diisi dari GraphQL
+          data: [0, 0, 0], 
           backgroundColor: ['#22c55e', '#f97316', '#3a3a3a'],
           borderWidth: 0,
           hoverOffset: 4,
@@ -343,7 +343,7 @@
       },
     });
 
-    /* ── Integrasi GraphQL Fetch Data ── */
+    /* ── FUNGSI REAL-TIME UTAMA ── */
     async function fetchDashboardData() {
         const query = `
             query {
@@ -381,7 +381,7 @@
             document.getElementById('stat-mobil').innerText = data.totalMobilHariIni;
             document.getElementById('stat-truk').innerText = data.totalTrukHariIni;
 
-            // Persentase
+            // Persentase Minggu Ini
             const persenMingguIni = data.totalKendaraanMasukMingguIni.persentase;
             const isNaik = persenMingguIni >= 0;
             const persentaseEl = document.getElementById('stat-minggu-persen');
@@ -411,11 +411,11 @@
             document.getElementById('legend-truk').innerText = pTruk + '%';
             document.getElementById('legend-lainnya').innerText = pLainnya + '%';
 
-            // 3. Render Aktivitas Terbaru
+            // 3. Render Aktivitas Terbaru (Real-time List)
             const aktivitasContainer = document.getElementById('aktivitas-container');
-            aktivitasContainer.innerHTML = ''; 
-
+            
             if (data.aktivitasTerbaru && data.aktivitasTerbaru.length > 0) {
+                aktivitasContainer.innerHTML = ''; // Kosongkan daftar lama
                 data.aktivitasTerbaru.forEach(log => {
                     const dateObj = new Date(log.detected_at);
                     const tgl = `${dateObj.getDate()}/${dateObj.getMonth()+1}/${dateObj.getFullYear()}`;
@@ -450,9 +450,9 @@
 
             // 4. Render Status Sistem
             const statusContainer = document.getElementById('status-container');
-            statusContainer.innerHTML = '';
-
+            
             if (data.statusSistem && data.statusSistem.length > 0) {
+                statusContainer.innerHTML = ''; // Kosongkan status lama
                 data.statusSistem.forEach(sys => {
                     const badgeBg = sys.is_active ? 'bg-green/20 text-green' : 'bg-red-500/20 text-red-400';
                     const rowHTML = `
@@ -475,7 +475,11 @@
         }
     }
 
+    // Panggil saat halaman pertama dibuka
     document.addEventListener('DOMContentLoaded', fetchDashboardData);
+
+    // KUNCI REAL-TIME: Panggil ulang fungsi yang sama persis setiap 3 detik
+    setInterval(fetchDashboardData, 3000); 
   </script>
 </body>
 </html>

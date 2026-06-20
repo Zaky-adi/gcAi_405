@@ -197,7 +197,7 @@
 
             <div class="flex items-center justify-between mb-3">
               <span class="text-muted text-[11px]">Total Terdeteksi</span>
-              <span class="text-white text-sm font-bold">14</span>
+              <span id="stat-total" class="text-white text-sm font-bold">14</span>
             </div>
 
             <div class="h-px bg-divider mb-3"></div>
@@ -207,7 +207,7 @@
                 <span class="w-2.5 h-2.5 rounded-full bg-green flex-shrink-0"></span>
                 <span class="text-muted text-[11px]">Mobil</span>
               </div>
-              <span class="text-white text-sm font-bold">11</span>
+              <span accesskey="" class="text-white text-sm font-bold">11</span>
             </div>
 
             <div class="flex items-center justify-between">
@@ -215,7 +215,7 @@
                 <span class="w-2.5 h-2.5 rounded-full bg-orange flex-shrink-0"></span>
                 <span class="text-muted text-[11px]">Truck/Pickup</span>
               </div>
-              <span class="text-white text-sm font-bold">3</span>
+              <span id="stat-truck" class="text-white text-sm font-bold">3</span>
             </div>
 
             <div class="mt-3 flex flex-col gap-1.5">
@@ -242,7 +242,7 @@
 
           <div class="bg-card border border-divider rounded-xl p-4 lg:flex-1 flex flex-col min-h-[150px] lg:min-h-0">
             <p class="text-white text-xs font-semibold mb-3">Log Deteksi</p>
-            <div class="flex-1 overflow-y-auto flex items-center justify-center">
+            <div id="log-container" class="flex-1 overflow-y-auto flex items-center justify-center">
               <p class="text-muted text-[11px] italic text-center">Menunggu deteksi...</p>
             </div>
           </div>
@@ -310,6 +310,82 @@
     updateClock();
     setInterval(updateClock, 1000);
   </script>
+
+<script>
+    // 1. Fungsi untuk menarik data dari GraphQL API
+    async function fetchRealtimeData() {
+        // Sesuaikan query dengan schema GraphQL milikmu
+        const query = `
+            query {
+                vehicleLogs(limit: 15, orderBy: [{ column: "created_at", order: DESC }]) {
+                    id
+                    vehicle_type
+                    confidence_score
+                    detected_at
+                }
+            }
+        `;
+
+        try {
+            const response = await fetch('/graphql', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    // 'Authorization': `Bearer ${localStorage.getItem('firebase_token')}` // Buka komentar ini jika GraphQL diproteksi token
+                },
+                body: JSON.stringify({ query })
+            });
+
+            const result = await response.json();
+            if (result.errors) throw new Error(result.errors[0].message);
+
+            const logs = result.data.vehicleLogs;
+            
+            // 2. Olah data untuk statistik
+            let total = logs.length;
+            let mobil = logs.filter(log => log.vehicle_type === 'mobil').length;
+            let truck = logs.filter(log => log.vehicle_type === 'truck' || log.vehicle_type === 'pickup').length;
+
+            // 3. Update angka di layar HTML secara otomatis
+            document.getElementById('stat-total').textContent = total;
+            document.getElementById('stat-mobil').textContent = mobil;
+            document.getElementById('stat-truck').textContent = truck;
+
+            // 4. Update Log List HTML
+            const logContainer = document.getElementById('log-container');
+            if (logs.length === 0) {
+                logContainer.innerHTML = `<p class="text-muted text-[11px] italic text-center">Belum ada deteksi.</p>`;
+            } else {
+                logContainer.innerHTML = ''; // Kosongkan log lama
+                logs.forEach(log => {
+                    const warna = (log.vehicle_type === 'mobil') ? 'text-green' : 'text-orange';
+                    const jam = new Date(log.detected_at).toLocaleTimeString('id-ID');
+                    
+                    const item = `
+                    <div class="flex items-center justify-between border-b border-divider pb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-white text-[10px] font-mono uppercase ${warna}">${log.vehicle_type}</span>
+                            <span class="text-muted text-[9px]">${(log.confidence_score * 100).toFixed(0)}%</span>
+                        </div>
+                        <span class="text-muted text-[9px]">${jam}</span>
+                    </div>`;
+                    logContainer.insertAdjacentHTML('beforeend', item);
+                });
+            }
+
+        } catch (error) {
+            console.error("Gagal menarik data realtime:", error);
+        }
+    }
+
+    // Panggil pertama kali saat halaman dibuka
+    fetchRealtimeData();
+
+    // RAHASIA REAL-TIME: Panggil ulang fungsi fetchRealtimeData setiap 2.5 detik (2500 milidetik)
+    setInterval(fetchRealtimeData, 2500);
+
+</script>
 
 </body>
 </html>

@@ -14,7 +14,7 @@ print("=== MEMULAI SIMULASI AI KAMERA GERBANG ===")
 print(f"Target Server : {GRAPHQL_URL}")
 print("Menunggu kendaraan lewat (mengirim data setiap 5-10 detik)...\n")
 
-kendaraan_list = ['mobil', 'truck', 'pickup', 'motor']
+kendaraan_list = ['mobil', 'truck/pickup', 'bus', 'motor']
 
 try:
     while True:

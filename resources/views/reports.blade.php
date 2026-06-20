@@ -184,7 +184,7 @@
     </main>
   </div>
 
-  <script>
+ <script>
     /* ── Mobile Sidebar Toggle Logic ── */
     function toggleSidebar() {
         const sidebar = document.getElementById('appSidebar');
@@ -234,21 +234,20 @@
 
     let currentTableData = [];
 
-    // ── Fetch GraphQL Data ──
-    async function fetchLaporan() {
+    // ── Fetch GraphQL Data (Bisa untuk Manual & Real-time) ──
+    // Kita tambah parameter isAutoRefresh agar tombol tidak berkedip "Memproses..." setiap 5 detik
+    async function fetchLaporan(isAutoRefresh = false) {
         const startDate = document.getElementById('startDate').value;
         const endDate = document.getElementById('endDate').value;
         const vehicleType = document.getElementById('vehicleType').value;
 
-        if (!startDate || !endDate) {
-            alert('Silakan pilih rentang tanggal.');
-            return;
-        }
+        if (!startDate || !endDate) return;
 
         const btnFilter = document.getElementById('btnFilter');
-        const oldText = btnFilter.innerHTML;
-        btnFilter.innerHTML = `Memproses...`;
-        btnFilter.disabled = true;
+        if (!isAutoRefresh) {
+            btnFilter.innerHTML = `Memproses...`;
+            btnFilter.disabled = true;
+        }
 
         const query = `
             query GetLaporan($startDate: String!, $endDate: String!, $vehicleType: String) {
@@ -314,7 +313,7 @@
                     const confidenceText = conf.toFixed(1) + '%';
 
                     return `
-                    <tr class="transition-colors cursor-default">
+                    <tr class="transition-colors cursor-default border-b border-divider/50 hover:bg-white/5">
                         <td class="text-center px-4 py-2.5 text-muted">${index + 1}</td>
                         <td class="text-center px-4 py-2.5 text-white/80 font-mono text-[10px]">${formattedDate}</td>
                         <td class="text-center px-4 py-2.5">
@@ -328,10 +327,14 @@
 
         } catch (error) {
             console.error("Gagal mengambil laporan:", error);
-            document.getElementById('tableBody').innerHTML = `<tr><td colspan="5" class="text-center py-6 text-red-400">Gagal memuat data. Periksa koneksi ke server.</td></tr>`;
+            if (!isAutoRefresh) {
+                document.getElementById('tableBody').innerHTML = `<tr><td colspan="5" class="text-center py-6 text-red-400">Gagal memuat data. Periksa koneksi ke server.</td></tr>`;
+            }
         } finally {
-            btnFilter.innerHTML = `Filter`;
-            btnFilter.disabled = false;
+            if (!isAutoRefresh) {
+                btnFilter.innerHTML = `Filter`;
+                btnFilter.disabled = false;
+            }
         }
     }
 
@@ -365,9 +368,68 @@
         document.body.removeChild(link);
     }
 
-    document.getElementById('btnFilter').addEventListener('click', fetchLaporan);
-    document.addEventListener('DOMContentLoaded', fetchLaporan); 
+    // Tarik data saat tombol Filter diklik (Manual)
+    document.getElementById('btnFilter').addEventListener('click', () => fetchLaporan(false));
+    
+    // Tarik data saat halaman pertama dibuka
+    document.addEventListener('DOMContentLoaded', () => fetchLaporan(false)); 
+
+    // REAL-TIME: Tarik data otomatis setiap 5 detik di belakang layar
+    setInterval(() => fetchLaporan(true), 5000);
+
   </script>
+
+  <script>
+    async function fetchReportsRealtime() {
+        const query = `
+            query {
+                vehicleLogs(limit: 20, orderBy: [{ column: "created_at", order: DESC }]) {
+                    id
+                    device_id
+                    vehicle_type
+                    confidence_score
+                    detected_at
+                }
+            }
+        `;
+
+        try {
+            const response = await fetch('/graphql', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query })
+            });
+
+            const result = await response.json();
+            if (result.errors) return;
+
+            const logs = result.data.vehicleLogs;
+            const tbody = document.getElementById('tableBody');
+            
+            if (tbody && logs.length > 0) {
+                tbody.innerHTML = ''; 
+                logs.forEach((log, index) => {
+                    const tanggal = new Date(log.detected_at).toLocaleDateString('id-ID');
+                    const jam = new Date(log.detected_at).toLocaleTimeString('id-ID');
+                    const akurasi = (log.confidence_score * 100).toFixed(0) + '%';
+                    
+                    const row = `
+                    <tr class="border-b border-divider hover:bg-white/5 transition-colors">
+                        <td class="py-3 px-4 text-xs text-muted">${index + 1}</td>
+                        <td class="py-3 px-4 text-xs text-white uppercase">${log.vehicle_type}</td>
+                        <td class="py-3 px-4 text-xs text-muted">${akurasi}</td>
+                        <td class="py-3 px-4 text-xs text-muted">${log.device_id}</td>
+                        <td class="py-3 px-4 text-xs text-muted">${tanggal} ${jam}</td>
+                    </tr>`;
+                    tbody.insertAdjacentHTML('beforeend', row);
+                });
+            }
+        } catch (error) { console.error("Realtime Reports Error:", error); }
+    }
+
+    fetchReportsRealtime();
+    setInterval(fetchReportsRealtime, 5000); // Laporan cukup ditarik setiap 5 detik agar tidak membebani server
+</script>
 
 </body>
 </html>
