@@ -10,6 +10,8 @@ class CreateLogMutation
     {
         try {
 
+        dd(env('FIREBASE_PROJECT_ID'));
+
         $firestore = app('firebase.firestore')->database();
 
         $collection = $firestore->collection('vehicle_logs');
