@@ -8,6 +8,36 @@ class CreateLogMutation
 {
     public function resolve($_, array $args)
     {
+        try {
+
+        $firestore = app('firebase.firestore')->database();
+
+        $collection = $firestore->collection('vehicle_logs');
+
+        $data = [
+            'device_id' => $args['device_id'],
+            'vehicle_type' => $args['vehicle_type'],
+            'confidence_score' => $args['confidence_score'],
+            'created_at' => Carbon::now()->toIso8601String(),
+        ];
+
+        $documentReference = $collection->add($data);
+
+        return [
+            'id' => $documentReference->id(),
+            'device_id' => $data['device_id'],
+            'vehicle_type' => $data['vehicle_type'],
+            'confidence_score' => $data['confidence_score'],
+            'detected_at' => $data['created_at'],
+        ];
+
+    } catch (\Throwable $e) {
+
+        throw new \Exception(
+            $e->getMessage()
+        );
+    }
+
         // 1. Hubungkan ke Firestore
         $firestore = app('firebase.firestore')->database();
         $collection = $firestore->collection('vehicle_logs');
