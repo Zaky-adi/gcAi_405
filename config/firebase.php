@@ -52,7 +52,7 @@ return [
 
             'credentials' => env('FIREBASE_CREDENTIALS_BASE64') 
                 ? json_decode(base64_decode(env('FIREBASE_CREDENTIALS_BASE64')), true) 
-                : env('FIREBASE_CREDENTIALS', env('GOOGLE_APPLICATION_CREDENTIALS')),
+                : env('FIREBASE_CREDENTIALS'),
 
             /*
              * ------------------------------------------------------------------------
