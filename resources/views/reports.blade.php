@@ -374,8 +374,8 @@
     // Tarik data saat halaman pertama dibuka
     document.addEventListener('DOMContentLoaded', () => fetchLaporan(false)); 
 
-    // REAL-TIME: Tarik data otomatis setiap 5 detik di belakang layar
-    setInterval(() => fetchLaporan(true), 5000);
+    // REAL-TIME: Tarik data otomatis setiap 15 detik di belakang layar
+    setInterval(() => fetchLaporan(true), 15000);
 
   </script>
 
@@ -428,7 +428,7 @@
     }
 
     fetchReportsRealtime();
-    setInterval(fetchReportsRealtime, 5000); // Laporan cukup ditarik setiap 5 detik agar tidak membebani server
+    setInterval(fetchReportsRealtime, 15000); // Laporan cukup ditarik setiap 5 detik agar tidak membebani server
 </script>
 
 </body>

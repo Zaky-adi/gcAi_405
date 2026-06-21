@@ -478,8 +478,8 @@
     // Panggil saat halaman pertama dibuka
     document.addEventListener('DOMContentLoaded', fetchDashboardData);
 
-    // KUNCI REAL-TIME: Panggil ulang fungsi yang sama persis setiap 3 detik
-    setInterval(fetchDashboardData, 3000); 
+    // KUNCI REAL-TIME: Panggil ulang fungsi yang sama persis setiap 10 detik
+    setInterval(fetchDashboardData, 10000); 
   </script>
 </body>
 </html>

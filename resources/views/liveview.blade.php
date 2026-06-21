@@ -377,8 +377,8 @@
     // Panggil saat halaman dibuka
     document.addEventListener('DOMContentLoaded', fetchRealtimeData);
 
-    // Refresh otomatis setiap 2.5 detik
-    setInterval(fetchRealtimeData, 2500);
+    // Refresh otomatis setiap 5 detik
+    setInterval(fetchRealtimeData, 5000);
   </script>
 
 </body>
