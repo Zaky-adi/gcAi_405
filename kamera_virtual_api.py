@@ -7,7 +7,7 @@ import random
 # KONFIGURASI HOSTING
 # ==========================================
 # Ganti dengan URL domain hosting kamu yang sebenarnya!
-GRAPHQL_URL = "https://project-31vv3.vercel.app/graphql" 
+GRAPHQL_URL = "http://127.0.0.1:8000/graphql" 
 DEVICE_ID = "Kamera_Gerbang_Utama_Virtual"
 
 print("=== MEMULAI SIMULASI AI KAMERA GERBANG ===")

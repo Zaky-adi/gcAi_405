@@ -23,7 +23,7 @@ class AuthMutation
             
         } catch (Exception $e) {
             // Jika email/password salah, lemparkan error ke GraphQL
-            throw new Exception("Login gagal: Periksa kembali email dan password Anda.");
+            throw new Exception("Error Asli Firebase: " . $e->getMessage());
         }
     }
 

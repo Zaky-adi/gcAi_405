@@ -475,11 +475,60 @@
         }
     }
 
-    // Panggil saat halaman pertama dibuka
-    document.addEventListener('DOMContentLoaded', fetchDashboardData);
+    // -- LOGIKA SMART POLLING --
+    let lastKnownLogId = null;
 
-    // KUNCI REAL-TIME: Panggil ulang fungsi yang sama persis setiap 10 detik
-    setInterval(fetchDashboardData, 10000); 
+    async function checkNewData() {
+        // Query SUPER RINGAN: Hanya minta 1 ID terakhir, tanpa minta data lain
+        const query = `
+            query {
+                vehicleLogs(limit: 1, orderBy: [{ column: "created_at", order: DESC }]) {
+                    id
+                }
+            }
+        `;
+
+        try {
+            const response = await fetch('/graphql', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` 
+                },
+                body: JSON.stringify({ query })
+            });
+
+            const result = await response.json();
+            if (result.errors || !result.data.vehicleLogs || result.data.vehicleLogs.length === 0) {
+                // Jika database kosong, tetap jalankan fetch 1 kali saat awal
+                if (lastKnownLogId === null) fetchDashboardData();
+                return;
+            }
+
+            const latestId = result.data.vehicleLogs[0].id;
+            
+            // Logika Pintar:
+            if (lastKnownLogId === null) {
+                // 1. Jika baru buka web pertama kali, simpan ID dan tarik semua data
+                lastKnownLogId = latestId;
+                fetchDashboardData();
+            } else if (lastKnownLogId !== latestId) {
+                // 2. JIKA ADA DATA BARU MASUK! Simpan ID baru, dan perbarui Dashboard
+                console.log("Ada kendaraan baru! Mengupdate Dashboard...");
+                lastKnownLogId = latestId;
+                fetchDashboardData();
+            }
+            // 3. Jika ID masih sama, jangan lakukan apa-apa (Hemat Server)
+
+        } catch (error) {
+            console.error("Gagal mengecek pembaruan data:", error);
+        }
+    }
+
+    // Jalankan pengecekan ringan ini setiap 2 detik
+    setInterval(checkNewData, 2000);
+    // Pengecekan pertama saat web dibuka
+    checkNewData();
   </script>
 </body>
 </html>

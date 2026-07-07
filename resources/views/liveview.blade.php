@@ -178,22 +178,23 @@
           <div class="cam-corner bl"></div>
           <div class="cam-corner br"></div>
 
-          <div class="absolute top-3 left-10 flex items-center gap-1.5 bg-black/50 rounded px-2 py-1">
+          <!-- VIDEO STREAM DIPINDAHKAN KE SINI -->
+          <!-- Gunakan IP Localhost (127.0.0.1) jika dites di laptop yang sama, atau ganti dengan IP WiFi Anda (contoh: 192.168.100.7) jika dites dari HP -->
+          <img src="http://127.0.0.1:5000/video_feed" class="absolute inset-0 w-full h-full object-cover z-0 rounded-xl" alt="Live CCTV Gerbang" onerror="this.style.display='none'">
+
+          <div class="absolute top-3 left-10 flex items-center gap-1.5 bg-black/50 rounded px-2 py-1 z-10">
             <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse flex-shrink-0"></span>
             <span class="text-white text-[10px] font-semibold tracking-widest">LIVE</span>
           </div>
 
-          <div class="absolute top-3 right-10 text-muted text-[10px]">CAM — 01</div>
+          <div class="absolute top-3 right-10 text-muted text-[10px] z-10">CAM — 01</div>
 
-          <div class="text-center flex flex-col items-center gap-3 z-10">
-            <svg class="w-14 h-14 text-[#3a3a3a]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
-              <circle cx="12" cy="13" r="3"/>
-            </svg>
-            <p class="text-[#3a3a3a] text-sm font-medium tracking-wide uppercase">CAMERA</p>
+          <!-- Teks CAMERA fallback jika video gagal dimuat -->
+          <div class="text-center flex flex-col items-center justify-center absolute inset-0 z-[-1]">
+            <p class="text-[#3a3a3a] text-sm font-medium tracking-wide uppercase">CAMERA OFFLINE</p>
           </div>
 
-          <div class="absolute bottom-0 left-0 right-0 bg-black/60 rounded-b-xl px-4 py-2 flex flex-col sm:flex-row sm:items-center justify-between">
+          <div class="absolute bottom-0 left-0 right-0 bg-black/60 rounded-b-xl px-4 py-2 flex flex-col sm:flex-row sm:items-center justify-between z-10">
             <span class="text-muted text-[9px] sm:text-[10px] truncate">Portal Gerbang Utama — Politeknik Negeri Batam</span>
             <span id="cam-time" class="text-muted text-[9px] sm:text-[10px] font-mono mt-1 sm:mt-0">00:00:00</span>
           </div>
@@ -327,7 +328,7 @@
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
-                    'Authorization': `Bearer ${token}` // KOMENTAR DIHAPUS, TOKEN DIAKTIFKAN!
+                    'Authorization': `Bearer ${token}` 
                 },
                 body: JSON.stringify({ query })
             });
@@ -374,11 +375,52 @@
         }
     }
 
-    // Panggil saat halaman dibuka
-    document.addEventListener('DOMContentLoaded', fetchRealtimeData);
+  // -- LOGIKA SMART POLLING --
+    let lastKnownLiveId = null;
 
-    // Refresh otomatis setiap 5 detik
-    setInterval(fetchRealtimeData, 5000);
+    async function checkLiveUpdate() {
+        // Query SUPER RINGAN
+        const query = `
+            query {
+                vehicleLogs(limit: 1, orderBy: [{ column: "created_at", order: DESC }]) {
+                    id
+                }
+            }
+        `;
+
+        try {
+            const response = await fetch('/graphql', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` 
+                },
+                body: JSON.stringify({ query })
+            });
+
+            const result = await response.json();
+            if (result.errors || !result.data.vehicleLogs || result.data.vehicleLogs.length === 0) {
+                if (lastKnownLiveId === null) fetchRealtimeData();
+                return;
+            }
+
+            const latestId = result.data.vehicleLogs[0].id;
+            
+            if (lastKnownLiveId === null) {
+                lastKnownLiveId = latestId;
+                fetchRealtimeData();
+            } else if (lastKnownLiveId !== latestId) {
+                lastKnownLiveId = latestId;
+                fetchRealtimeData();
+            }
+        } catch (error) {
+            console.error("Gagal mengecek pembaruan Live View:", error);
+        }
+    }
+
+    // Jalankan pengecekan ringan ini setiap 2 detik
+    setInterval(checkLiveUpdate, 2000);
+    checkLiveUpdate();
   </script>
 
 </body>
