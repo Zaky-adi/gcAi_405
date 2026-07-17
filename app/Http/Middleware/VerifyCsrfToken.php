@@ -12,6 +12,6 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        //
+        '/graphql', // Tambahkan baris ini agar fetch JS tidak diblokir
     ];
 }

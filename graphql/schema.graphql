@@ -67,6 +67,22 @@ type ParkingLot {
     current_occupied: Int!
 }
 
+type ScheduleLog {
+  id: ID!
+  gateId: ID!
+  action: String!
+  details: String!
+  createdAt: String!
+}
+
+type GateSchedule {
+  id: ID!
+  gateName: String!
+  startTime: String!
+  endTime: String!
+  activeDays: [String!]!
+}
+
 # ==========================================
 # 2. ENDPOINT UNTUK MEMBACA DATA (QUERIES)
 # ==========================================
@@ -109,6 +125,9 @@ type Query {
 
     # Endpoint untuk halaman Health Check / Status Sistem
     statusSistem: [SystemStatus!]!
+
+    getGateSchedule(id: ID!): GateSchedule
+    getScheduleLogs(gateId: ID!, limit: Int = 10): [ScheduleLog!]!
 }
 
 # ==========================================
@@ -148,4 +167,12 @@ type Mutation {
         role: String!
     ): User!
         @field(resolver: "App\\GraphQL\\Mutations\\UserMutation@createUser")
+    
+    # Dipanggil ketika tombol "Simpan Jadwal" ditekan di frontend
+    updateGateSchedule(
+        id: ID!
+        startTime: String!
+        endTime: String!
+        activeDays: [String!]!
+    ): GateSchedule!
 }
